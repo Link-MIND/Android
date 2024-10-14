@@ -1,6 +1,7 @@
 package org.sopt.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,6 +15,7 @@ import org.sopt.home.adapter.HomeWeekLinkAdapter
 import org.sopt.home.adapter.HomeWeekRecommendLinkAdapter
 import org.sopt.home.adapter.ItemDecoration
 import org.sopt.home.databinding.FragmentHomeBinding
+import org.sopt.home.model.UpdatePriority
 import org.sopt.model.home.PopupInfo
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.nav.DeepLinkUtil
@@ -73,6 +75,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       }
 
       is HomeSideEffect.ShowPopupInfo -> showPopupInfo(viewModel.container.stateFlow.value.popupList)
+      is HomeSideEffect.ShowUpdateDialog -> showUpdateDialog(viewModel.container.stateFlow.value.marketUpdate)
     }
   }
 
@@ -85,6 +88,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       getRecommendSite()
       getWeekBestLink()
       getPopupListInfo()
+      checkMarketUpdateState()
     }
   }
 
@@ -172,6 +176,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
         )
         surveyDialog.show(parentFragmentManager, this.tag)
       }
+    }
+  }
+
+  private fun showUpdateDialog(marketUpdate: UpdatePriority) {
+    if (marketUpdate != UpdatePriority.EMPTY) {
+      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(marketUpdate, {})
+      marketUpdateDialog.show(parentFragmentManager, this.tag)
     }
   }
 }

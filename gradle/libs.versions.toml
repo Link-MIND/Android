@@ -47,6 +47,7 @@ detekt = "1.23.1"
 kakao-login = "2.19.0"
 
 google-service = "4.4.0"
+google-play-core = "1.10.2"
 process-pheonix = "2.1.2"
 preference = "1.2.1"
 core-splashscreen = "1.0.1"
@@ -152,6 +153,7 @@ viewpager-indicator = { group = "com.tbuonomo", name = "dotsindicator", version.
 detekt-plugin-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 
 kakao-login = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-login" }
+google-play-core = { group = "com.google.android.play", name = "core", version.ref = "google-play-core" }
 
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }

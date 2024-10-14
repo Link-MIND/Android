@@ -1,9 +1,13 @@
 package org.sopt.home
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -14,6 +18,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
+import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
 import org.sopt.home.usecase.GetPopupInfo
 import org.sopt.home.usecase.GetRecommendSite
@@ -27,6 +32,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+  @ApplicationContext private val context: Context,
   private val getMainPageUserClip: GetMainPageUserClip,
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
@@ -113,6 +119,23 @@ class HomeViewModel @Inject constructor(
         .onFailure {
           Log.d("patchPopupInvisible", "$it")
         }
+    }
+  }
+
+  fun checkMarketUpdateState() {
+    val appUpdateManager = AppUpdateManagerFactory.create(context)
+    val appUpdateTask = appUpdateManager.appUpdateInfo
+
+    appUpdateTask.addOnSuccessListener { appUpdateInfo ->
+      if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+        intent {
+          reduce {
+            state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+          }
+        }
+      }
+    }.addOnFailureListener { appUpdateInfo ->
+      Log.d("appUpdateInfo", appUpdateInfo.message.toString())
     }
   }
 
