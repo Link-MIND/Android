@@ -55,6 +55,8 @@ core-splashscreen = "1.0.1"
 viewpager-indicator = "5.0"
 activity = "1.8.0"
 
+amplitude = "1.+"
+
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -157,6 +159,8 @@ google-play-core = { group = "com.google.android.play", name = "core", version.r
 
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
+amplitude-analytics = { group = "com.amplitude", name = "analytics-android", version.ref = "amplitude" }
 
 [bundles]
 firebase = ["firebase-analytics", "firebase-database", "firebase-messaging", "firebase-remoteConfig"]
