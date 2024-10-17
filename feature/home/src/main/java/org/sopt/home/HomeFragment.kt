@@ -1,7 +1,6 @@
 package org.sopt.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -30,6 +29,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private lateinit var homeWeekLinkAdapter: HomeWeekLinkAdapter
   private lateinit var homeWeekRecommendLinkAdapter: HomeWeekRecommendLinkAdapter
   private val viewModel by viewModels<HomeViewModel>()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initView()
@@ -173,6 +173,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
           it.popupImage,
           { viewModel.navigateWebview(it.popupLinkUrl) },
           { viewModel.patchPopupInvisible(it.popupId.toLong(), 7) },
+          { viewModel.setPopupVisible() },
         )
         surveyDialog.show(parentFragmentManager, this.tag)
       }
@@ -181,7 +182,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
 
   private fun showUpdateDialog(marketUpdate: UpdatePriority) {
     if (marketUpdate != UpdatePriority.EMPTY) {
-      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(marketUpdate, {})
+      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(
+        marketUpdate,
+        { viewModel.setMarketUpdateVisible() },
+      )
       marketUpdateDialog.show(parentFragmentManager, this.tag)
     }
   }

@@ -8,6 +8,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -17,6 +18,7 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import org.sopt.datastore.datastore.SecurityDataStore
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
@@ -39,6 +41,7 @@ class HomeViewModel @Inject constructor(
   private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
   private val patchPopupInvisible: PatchPopupInvisible,
   private val getPopupInfo: GetPopupInfo,
+  private val dataStore: SecurityDataStore,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
   override val container: Container<HomeState, HomeSideEffect> =
     container(HomeState())
@@ -100,13 +103,15 @@ class HomeViewModel @Inject constructor(
   }
 
   fun getPopupListInfo() = intent {
-    getPopupInfo.invoke().onSuccess {
-      postSideEffect(HomeSideEffect.ShowPopupInfo)
-      reduce {
-        state.copy(popupList = it)
+    if (dataStore.flowPopupVisibility().first()) {
+      getPopupInfo.invoke().onSuccess {
+        postSideEffect(HomeSideEffect.ShowPopupInfo)
+        reduce {
+          state.copy(popupList = it)
+        }
+      }.onFailure {
+        Log.d("getPopupListInfo", "$it")
       }
-    }.onFailure {
-      Log.d("getPopupListInfo", "$it")
     }
   }
 
@@ -123,19 +128,24 @@ class HomeViewModel @Inject constructor(
   }
 
   fun checkMarketUpdateState() {
-    val appUpdateManager = AppUpdateManagerFactory.create(context)
-    val appUpdateTask = appUpdateManager.appUpdateInfo
+    viewModelScope.launch {
+      if (dataStore.flowMarketUpdate().first()) {
+        val appUpdateManager = AppUpdateManagerFactory.create(context)
+        val appUpdateTask = appUpdateManager.appUpdateInfo
 
-    appUpdateTask.addOnSuccessListener { appUpdateInfo ->
-      if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-        intent {
-          reduce {
-            state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+        appUpdateTask.addOnSuccessListener { appUpdateInfo ->
+          if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+            intent {
+              postSideEffect(HomeSideEffect.ShowUpdateDialog)
+              reduce {
+                state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+              }
+            }
           }
+        }.addOnFailureListener { appUpdateInfo ->
+          Log.d("appUpdateInfo", appUpdateInfo.message.toString())
         }
       }
-    }.addOnFailureListener { appUpdateInfo ->
-      Log.d("appUpdateInfo", appUpdateInfo.message.toString())
     }
   }
 
@@ -158,6 +168,18 @@ class HomeViewModel @Inject constructor(
   fun navigateWebview(url: String) = blockingIntent {
     reduce { state.copy(url = url) }
     postSideEffect(HomeSideEffect.NavigateWebView)
+  }
+
+  fun setPopupVisible() {
+    viewModelScope.launch {
+      dataStore.setPopupVisibility(false)
+    }
+  }
+
+  fun setMarketUpdateVisible() {
+    viewModelScope.launch {
+      dataStore.setMarketUpdate(false)
+    }
   }
 
   fun checkPopupDate(activeStartDate: String, activeEndDate: String): Boolean {

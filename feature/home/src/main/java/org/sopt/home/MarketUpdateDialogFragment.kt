@@ -17,7 +17,7 @@ class MarketUpdateDialogFragment : BindingDialogFragment<FragmentMarketUpdateDia
   { FragmentMarketUpdateDialogBinding.inflate(it) },
 ) {
   private var marketUpdatePriority: UpdatePriority? = null
-  private var handleUpdate: () -> Unit = {}
+  private var marketUpdateVisible: () -> Unit = {}
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -26,8 +26,9 @@ class MarketUpdateDialogFragment : BindingDialogFragment<FragmentMarketUpdateDia
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
+    marketUpdateVisible.invoke()
     checkUpdatePriority(marketUpdatePriority)
+
     binding.btnMarketUpdateDialogSkip.onThrottleClick {
       dismiss()
     }
@@ -92,15 +93,14 @@ class MarketUpdateDialogFragment : BindingDialogFragment<FragmentMarketUpdateDia
     }
   }
 
-
   companion object {
     fun newInstance(
       updatePriority: UpdatePriority,
-      updateButtonClick: () -> Unit,
+      setMarketUpdateVisible: () -> Unit,
     ): MarketUpdateDialogFragment {
       return MarketUpdateDialogFragment().apply {
         marketUpdatePriority = updatePriority
-        handleUpdate = updateButtonClick
+        marketUpdateVisible = setMarketUpdateVisible
       }
     }
   }

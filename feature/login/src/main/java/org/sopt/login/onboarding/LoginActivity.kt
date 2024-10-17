@@ -43,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
     initCheckAutoLogin()
     initKakaoLoginBtnClickListener()
     initAuthStateObserver()
+    initAllPopupVisible()
 
     binding.vpOnboarding.adapter = LoginViewPagerAdapter(this)
     binding.indicatorOnboarding.attachTo(binding.vpOnboarding)
@@ -96,6 +97,13 @@ class LoginActivity : AppCompatActivity() {
             this@LoginActivity.toast(it.message.toString())
           }
       }
+    }
+  }
+
+  private fun initAllPopupVisible() {
+    lifecycleScope.launch {
+      dataStore.setPopupVisibility(true)
+      dataStore.setMarketUpdate(true)
     }
   }
 
