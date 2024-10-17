@@ -3,6 +3,8 @@ package org.sopt.linkmind
 import android.app.Application
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import dagger.hilt.android.HiltAndroidApp
@@ -16,6 +18,13 @@ class LinkMindApp : Application() {
     setTimber()
     setDarkMode()
     setKakaoSdk()
+    val amplitude = Amplitude(
+        Configuration(
+            apiKey = BuildConfig.AMPLITUDE_KEY,
+            context = applicationContext,
+        ),
+    )
+    amplitude.track("Sign Up")
 
     var keyHash = Utility.getKeyHash(this)
     Log.e("키해시", keyHash)
