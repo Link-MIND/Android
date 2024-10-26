@@ -6,4 +6,4 @@ data class PopupInfo(
   val popupActiveStartDate: String,
   val popupActiveEndDate: String,
   val popupLinkUrl: String,
-  )
+)

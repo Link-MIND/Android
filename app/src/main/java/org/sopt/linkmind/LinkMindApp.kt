@@ -19,10 +19,10 @@ class LinkMindApp : Application() {
     setDarkMode()
     setKakaoSdk()
     val amplitude = Amplitude(
-        Configuration(
-            apiKey = BuildConfig.AMPLITUDE_KEY,
-            context = applicationContext,
-        ),
+      Configuration(
+        apiKey = BuildConfig.AMPLITUDE_KEY,
+        context = applicationContext,
+      ),
     )
     amplitude.track("Sign Up")
 

@@ -14,7 +14,6 @@ class RemotePopupDatasourceImpl @Inject constructor(
   override suspend fun patchPopupInvisible(popupId: Long, hideDate: Long): PopupInvisible =
     popupService.patchPopupInvisible(RequestPopupInvisibleDto(popupId, hideDate)).data!!.toCoreModel()
 
-
   override suspend fun getPopupInfo(): List<PopupInfo> =
     popupService.getPopupInfo().data!!.popupList.map { it.toCoreModel() }
 }

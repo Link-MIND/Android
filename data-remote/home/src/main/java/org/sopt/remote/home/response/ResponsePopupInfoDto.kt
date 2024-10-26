@@ -7,8 +7,9 @@ import org.sopt.model.home.PopupInfo
 @Serializable
 data class ResponsePopupInfoDto(
   @SerialName("popupList")
-  val popupList: List<ResponsePopupInfo>
+  val popupList: List<ResponsePopupInfo>,
 )
+
 @Serializable
 data class ResponsePopupInfo(
   @SerialName("id")
