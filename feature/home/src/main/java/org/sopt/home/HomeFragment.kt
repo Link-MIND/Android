@@ -33,6 +33,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     collectState()
     navigateToSetting()
     navigateToSearch()
+    navigateToAllClip()
   }
 
   private fun initView() {
@@ -69,6 +70,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
           "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
         )
       }
+      is HomeSideEffect.NavigateAllClip -> navigateToClip()
     }
   }
 
@@ -91,6 +93,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private fun navigateToSearch() {
     binding.clHomeSearch.onThrottleClick {
       viewModel.navigateSearch()
+    }
+  }
+
+  private fun navigateToAllClip(){
+    binding.ivRecentClip.onThrottleClick {
+      viewModel.navigateAllClip()
     }
   }
 
@@ -136,6 +144,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       popEnterAnim = android.R.anim.fade_in,
       popExitAnim = org.sopt.mainfeature.R.anim.to_bottom,
     )
+    findNavController().navigate(request, navOptions)
+  }
+
+  private fun navigateToClip(){
+    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption("featureSaveLink://ClipLinkFragment/0/전체 클립")
     findNavController().navigate(request, navOptions)
   }
 

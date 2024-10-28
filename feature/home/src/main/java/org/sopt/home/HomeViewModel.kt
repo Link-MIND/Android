@@ -89,6 +89,7 @@ class HomeViewModel @Inject constructor(
   fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
   fun showBottomSheet() = intent { postSideEffect(HomeSideEffect.ShowBottomSheet) }
+  fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
   fun navigateClipLink(categoryId: Long?, categoryName: String?) = blockingIntent {

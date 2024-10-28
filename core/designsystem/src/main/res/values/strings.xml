@@ -152,7 +152,7 @@
   <string name="home_unforget_read">잊지 않고 읽었어요!</string>
   <string name="home_toast_progress_link">nn</string>
   <string name="home_all_toast_ex_num">/nn</string>
-  <string name="home_user_clip">님의 클립</string>
+  <string name="home_user_clip">님이 최근 저장한 링크</string>
   <string name="home_this_week_link">이주의 링크</string>
   <string name="home_this_week_recommend">이주의 추천 사이트</string>
 
