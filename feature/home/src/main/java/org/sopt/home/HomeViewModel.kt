@@ -15,6 +15,7 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.usecase.GetMainPageUserClip
+import org.sopt.home.usecase.GetRecentSavedLink
 import org.sopt.home.usecase.GetRecommendSite
 import org.sopt.home.usecase.GetWeekBestLink
 import org.sopt.model.category.Category
@@ -26,6 +27,7 @@ class HomeViewModel @Inject constructor(
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
   private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
+  private val getRecentSavedLink: GetRecentSavedLink,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
   override val container: Container<HomeState, HomeSideEffect> =
     container(HomeState())

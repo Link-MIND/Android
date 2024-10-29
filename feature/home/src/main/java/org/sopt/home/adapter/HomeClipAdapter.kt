@@ -24,7 +24,7 @@ class HomeClipAdapter(
     )
   }
 
-  override fun getItemCount() = currentList.size.coerceAtMost(4)
+  override fun getItemCount() = currentList.size.coerceAtMost(3)
 
   companion object {
     private val DiffUtil = ItemDiffCallback<Category>(
