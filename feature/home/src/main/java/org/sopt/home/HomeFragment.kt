@@ -5,8 +5,6 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import designsystem.components.bottomsheet.LinkMindBottomSheet
-import designsystem.components.toast.linkMindSnackBar
 import org.orbitmvi.orbit.viewmodel.observe
 import org.sopt.common.util.delSpace
 import org.sopt.home.adapter.HomeClipAdapter
@@ -51,7 +49,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     binding.tvHomeUserClipName.text = homeState.nickName
     binding.tvHomeToastLinkCount.text = "${homeState.readToastNum}개의 링크"
     binding.pbLinkmindHome.setProgressBarMain(homeState.calculateProgress())
-    homeClipAdapter.submitList(homeState.categoryList)
+    homeClipAdapter.submitList(homeState.recentSavedLink)
     homeWeekLinkAdapter.submitList(homeState.weekBestLink)
     homeWeekRecommendLinkAdapter.submitList(homeState.recommendLink)
   }
@@ -63,7 +61,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateClipLink -> navigateToDestination(
         "featureSaveLink://ClipLinkFragment/${viewModel.container.stateFlow.value.categoryId}/${viewModel.container.stateFlow.value.categoryName}",
       )
-      is HomeSideEffect.ShowBottomSheet -> showHomeBottomSheet()
+
+      is HomeSideEffect.NavigateSaveLink -> navigateToSavedClip()
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
         navigateToDestination(
@@ -81,9 +80,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     viewModel.apply {
       getMainPageUserClip()
       getRecommendSite()
+      getRecentSavedClip()
       getWeekBestLink()
     }
   }
+
   private fun navigateToSetting() {
     binding.ivHomeSetting.onThrottleClick {
       viewModel.navigateSetting()
@@ -96,7 +97,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     }
   }
 
-  private fun navigateToAllClip(){
+  private fun navigateToAllClip() {
     binding.ivRecentClip.onThrottleClick {
       viewModel.navigateAllClip()
     }
@@ -108,13 +109,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
         viewModel.navigateClipLink(it.categoryId, it.categoryTitle)
       },
       onClickEmptyClip = {
-        viewModel.showBottomSheet()
+        viewModel.navigateSaveLink()
       },
     )
     binding.rvHomeClip.adapter = homeClipAdapter
-    val spacingClipInPixels = resources.getDimensionPixelSize(R.dimen.spacing_11)
-    binding.rvHomeClip.addItemDecoration(ItemDecoration(2, spacingClipInPixels))
-  }
+   }
 
   private fun setWeekLinkAdapter() {
     homeWeekLinkAdapter = HomeWeekLinkAdapter(
@@ -147,24 +146,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     findNavController().navigate(request, navOptions)
   }
 
-  private fun navigateToClip(){
+  private fun navigateToClip() {
     val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption("featureSaveLink://ClipLinkFragment/0/전체 클립")
     findNavController().navigate(request, navOptions)
   }
 
-  private fun showHomeBottomSheet() {
-    val linkMindBottomSheet = LinkMindBottomSheet(requireContext())
-    linkMindBottomSheet.show()
-    linkMindBottomSheet.apply {
-      setBottomSheetHint(org.sopt.mainfeature.R.string.home_new_clip_info)
-      setTitle(org.sopt.mainfeature.R.string.home_add_clip)
-      setErroMsg(org.sopt.mainfeature.R.string.home_error_clip_info)
-      bottomSheetConfirmBtnClick {
-        if (showErrorMsg()) return@bottomSheetConfirmBtnClick
-        viewModel.saveCategoryTitle(it)
-        dismiss()
-        requireContext().linkMindSnackBar(binding.vSnack, "클립 생성 완료!", false)
-      }
-    }
+  private fun navigateToSavedClip(){
+    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption("featureSaveLink://saveLinkFragment?clipboardLink=")
+    findNavController().navigate(request, navOptions)
   }
 }

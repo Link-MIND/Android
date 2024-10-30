@@ -204,9 +204,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingHorizontal="20dp"
-        android:paddingTop="15dp"
+        android:paddingTop="14dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_home_user_clip_name"
         tools:itemCount="2"
         tools:listitem="@layout/item_home_clip" />

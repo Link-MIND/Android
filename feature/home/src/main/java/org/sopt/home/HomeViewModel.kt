@@ -68,6 +68,22 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun getRecentSavedClip() = intent {
+    getRecentSavedLink.invoke().onSuccess {
+      if(it.isEmpty()) {
+        reduce {
+          state.copy(recentSavedLink = listOf(null))
+        }
+      } else {
+        reduce {
+          state.copy(recentSavedLink = (container.stateFlow.value.recentSavedLink + it).distinctBy { it?.toastId })
+        }
+      }
+    }.onFailure {
+      Log.d("RecentSaved", "$it")
+    }
+  }
+
   fun getRecommendSite() = intent {
     getRecommendSite.invoke().onSuccess {
       reduce {
@@ -90,7 +106,7 @@ class HomeViewModel @Inject constructor(
 
   fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
-  fun showBottomSheet() = intent { postSideEffect(HomeSideEffect.ShowBottomSheet) }
+  fun navigateSaveLink() = intent { postSideEffect(HomeSideEffect.NavigateSaveLink) }
   fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
