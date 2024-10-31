@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import org.sopt.home.databinding.ItemHomeClipBinding
 import org.sopt.home.viewholder.HomeClipViewHolder
-import org.sopt.model.category.Category
 import org.sopt.model.home.RecentSavedLink
 import org.sopt.ui.view.ItemDiffCallback
 
 class HomeClipAdapter(
-  private val onClickClip: (Category) -> Unit,
+  private val onClickClip: (RecentSavedLink) -> Unit,
   private val onClickEmptyClip: () -> Unit,
 ) : ListAdapter<RecentSavedLink, HomeClipViewHolder>(DiffUtil) {
   override fun onBindViewHolder(holder: HomeClipViewHolder, position: Int) {

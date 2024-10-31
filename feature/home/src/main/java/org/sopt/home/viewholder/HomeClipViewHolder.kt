@@ -5,22 +5,21 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import org.sopt.home.databinding.ItemHomeClipBinding
-import org.sopt.model.category.Category
 import org.sopt.model.home.RecentSavedLink
+import org.sopt.ui.view.onThrottleClick
 
 class HomeClipViewHolder(
   private val binding: ItemHomeClipBinding,
-  private val onClickClip: (Category) -> Unit,
+  private val onClickClip: (RecentSavedLink) -> Unit,
   private val onClickEmptyClip: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
   fun onBind(data: RecentSavedLink?, position: Int) {
-    if (data==null) {
+    if (data == null) {
       with(binding) {
         clHomeItemClip.isGone = true
         clHomeItemClipEmpty.isVisible = true
         root.setOnClickListener {
           onClickEmptyClip()
-          //TODO.  onClick 수정, ui삐꾸난거 잡기
         }
       }
       return
@@ -39,6 +38,9 @@ class HomeClipViewHolder(
         tvItemClipLink.isVisible = true
       } else {
         tvItemClipLink.isGone = true
+      }
+      root.onThrottleClick {
+        onClickClip.invoke(data)
       }
     }
   }

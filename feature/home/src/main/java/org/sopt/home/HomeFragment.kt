@@ -61,15 +61,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateClipLink -> navigateToDestination(
         "featureSaveLink://ClipLinkFragment/${viewModel.container.stateFlow.value.categoryId}/${viewModel.container.stateFlow.value.categoryName}",
       )
-
-      is HomeSideEffect.NavigateSaveLink -> navigateToSavedClip()
+      is HomeSideEffect.NavigateSaveLink -> navigateToDestinationWithoutAnim("featureSaveLink://saveLinkFragment?clipboardLink=")
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
         navigateToDestination(
           "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
         )
       }
-      is HomeSideEffect.NavigateAllClip -> navigateToClip()
+      is HomeSideEffect.NavigateAllClip -> navigateToDestinationWithoutAnim("featureSaveLink://ClipLinkFragment/0/전체 클립")
     }
   }
 
@@ -106,14 +105,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private fun setClipAdapter() {
     homeClipAdapter = HomeClipAdapter(
       onClickClip = {
-        viewModel.navigateClipLink(it.categoryId, it.categoryTitle)
+        viewModel.navigateWebview(it.linkUrl)
       },
       onClickEmptyClip = {
         viewModel.navigateSaveLink()
       },
     )
     binding.rvHomeClip.adapter = homeClipAdapter
-   }
+  }
 
   private fun setWeekLinkAdapter() {
     homeWeekLinkAdapter = HomeWeekLinkAdapter(
@@ -146,13 +145,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     findNavController().navigate(request, navOptions)
   }
 
-  private fun navigateToClip() {
-    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption("featureSaveLink://ClipLinkFragment/0/전체 클립")
-    findNavController().navigate(request, navOptions)
-  }
-
-  private fun navigateToSavedClip(){
-    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption("featureSaveLink://saveLinkFragment?clipboardLink=")
+  private fun navigateToDestinationWithoutAnim(destination: String) {
+    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption(
+      destination.delSpace(),
+    )
     findNavController().navigate(request, navOptions)
   }
 }
