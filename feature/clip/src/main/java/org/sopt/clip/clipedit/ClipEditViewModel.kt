@@ -32,11 +32,11 @@ class ClipEditViewModel @Inject constructor(
   private val _editTitleState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
   val editTitleState: StateFlow<UiState<Unit>> = _editTitleState.asStateFlow()
 
-  private val _last2 = MutableStateFlow<UiState<Int>>(UiState.Empty)
-  val last2: StateFlow<UiState<Int>> = _last2.asStateFlow()
+  private val _last2 = MutableStateFlow<UiState<Pair<Long,Int>>>(UiState.Empty)
+  val last2: StateFlow<UiState<Pair<Long,Int>>> = _last2.asStateFlow()
 
-  fun update2(a: Int) = viewModelScope.launch {
-    _last2.emit(UiState.Success(a))
+  fun update2(clipId: Long, newIndex:Int) = viewModelScope.launch {
+    _last2.emit(UiState.Success(Pair(clipId,newIndex)))
   }
 
   init {
