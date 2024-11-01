@@ -21,15 +21,15 @@ class ClipEditAdapter(
     holder.onBind(getItem(position))
   }
 
-  fun getList(): List<Category> {
-    return currentList.toList()
-  }
-
   fun moveItem(fromPosition: Int, toPosition: Int) {
     val currentList = currentList.toMutableList()
     val item = currentList.removeAt(fromPosition)
     currentList.add(toPosition, item)
     submitList(currentList)
+  }
+
+  fun getCategoryId(position: Int): Long? {
+    return currentList[position].categoryId
   }
 
   companion object {

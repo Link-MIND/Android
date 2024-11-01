@@ -43,15 +43,10 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
     val callback = ItemTouchCallback(
       adapter = clipEditAdapter,
       recyclerView = binding.rvClipEdit,
-    ) { newIndexList ->
-      newIndexList.forEachIndexed { index, value ->
-        value.categoryId?.let {
-          viewModel.update2(it, index)
-        }
-      }
+    ) { categoryId, newIndex ->
+      if (categoryId != null) viewModel.updateCategoryEditPriorityState(categoryId, newIndex)
     }
     ItemTouchHelper(callback).attachToRecyclerView(binding.rvClipEdit)
-
     updateEditListView()
     updateDelete()
     onClickBackButton()
@@ -136,7 +131,7 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
   }
 
   private fun editCategoryPriority() {
-    viewModel.last2.flowWithLifecycle(viewLifeCycle).onEach { state ->
+    viewModel.categoryEditPriorityState.flowWithLifecycle(viewLifeCycle).onEach { state ->
       when (state) {
         is UiState.Success -> {
           viewModel.patchCategoryEditPriority(state.data.first, state.data.second)
