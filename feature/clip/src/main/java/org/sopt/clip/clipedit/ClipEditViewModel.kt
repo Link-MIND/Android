@@ -42,7 +42,7 @@ class ClipEditViewModel @Inject constructor(
   fun updateCategoryEditPriorityState(clipId: Long, newIndex: Int) = viewModelScope.launch {
     _categoryEditPriorityState.emit(UiState.Success(Pair(clipId, newIndex)))
   }
-  
+
   fun getCategoryAll() = viewModelScope.launch {
     getCategoryAll.invoke().onSuccess {
       val allCategoryList = listOf<Category>(
