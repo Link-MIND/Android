@@ -9,6 +9,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.toast.linkMindSnackBar
 import kotlinx.coroutines.flow.launchIn
@@ -264,10 +265,10 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
     val editTitleBottomSheet = LinkMindBottomSheet(requireContext())
     editTitleBottomSheet.show()
     editTitleBottomSheet.apply {
+      setBottomSheetType(BottomSheetType.LINK)
       setBottomSheetHint(itemText)
       setTitle(org.sopt.mainfeature.R.string.clip_link_bottom_sheet_modify_title)
       setBottomSheetText(itemText)
-      setErroMsg(org.sopt.mainfeature.R.string.error_clip_length)
       bottomSheetConfirmBtnClick { // dto 수정됨
         val newTitle = getText()
         viewModel.patchLinkTitle(itemId, newTitle)

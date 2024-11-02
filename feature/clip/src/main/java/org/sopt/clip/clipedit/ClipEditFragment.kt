@@ -7,6 +7,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.dialog.LinkMindDialog
 import designsystem.components.toast.linkMindSnackBar
@@ -105,6 +106,7 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
     val editTitleBottomSheet = LinkMindBottomSheet(requireContext())
     editTitleBottomSheet.show()
     editTitleBottomSheet.apply {
+      setBottomSheetType(BottomSheetType.CLIP)
       setBottomSheetHint(org.sopt.mainfeature.R.string.home_new_clip_info)
       setTitle(org.sopt.mainfeature.R.string.edit_clip_edit_title)
       setBottomSheetText(itemText)

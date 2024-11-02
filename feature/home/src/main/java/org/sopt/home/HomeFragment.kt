@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.toast.linkMindSnackBar
 import org.orbitmvi.orbit.viewmodel.observe
@@ -143,11 +144,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     val linkMindBottomSheet = LinkMindBottomSheet(requireContext())
     linkMindBottomSheet.show()
     linkMindBottomSheet.apply {
+      setBottomSheetType(BottomSheetType.CLIP)
       setBottomSheetHint(org.sopt.mainfeature.R.string.home_new_clip_info)
       setTitle(org.sopt.mainfeature.R.string.home_add_clip)
       setErroMsg(org.sopt.mainfeature.R.string.home_error_clip_info)
       bottomSheetConfirmBtnClick {
-        if (showErrorMsg()) return@bottomSheetConfirmBtnClick
+        if (showErrorMsg(BottomSheetType.CLIP)) return@bottomSheetConfirmBtnClick
         viewModel.saveCategoryTitle(it)
         dismiss()
         requireContext().linkMindSnackBar(binding.vSnack, "클립 생성 완료!", false)

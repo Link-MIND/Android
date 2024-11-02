@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.toast.linkMindSnackBar
 import kotlinx.coroutines.flow.launchIn
@@ -115,6 +116,7 @@ class ClipFragment : BindingFragment<FragmentClipBinding>({ FragmentClipBinding.
       val addClipBottomSheet = LinkMindBottomSheet(requireContext())
       addClipBottomSheet.show()
       addClipBottomSheet.apply {
+        setBottomSheetType(BottomSheetType.CLIP)
         setBottomSheetHint(org.sopt.mainfeature.R.string.clip_new_clip_info)
         setTitle(org.sopt.mainfeature.R.string.clip_add_clip)
         setErroMsg(org.sopt.mainfeature.R.string.error_clip_length)

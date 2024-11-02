@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.button.state.LinkMindButtonState
 import designsystem.components.dialog.LinkMindDialog
@@ -137,12 +138,13 @@ class SaveLinkSetClipFragment : BindingFragment<FragmentSaveLinkSetClipBinding>(
     val linkMindBottomSheet = LinkMindBottomSheet(requireContext())
     linkMindBottomSheet.show()
     linkMindBottomSheet.apply {
+      setBottomSheetType(BottomSheetType.CLIP)
       setTitle(R.string.clip_add_clip)
       setErroMsg(R.string.error_clip_length)
       setBottomSheetHint(R.string.home_new_clip_info)
       bottomSheetConfirmBtnClick {
         viewModel.getCategoryDuplicate(it)
-        if (showErrorMsg()) return@bottomSheetConfirmBtnClick
+        if (showErrorMsg(BottomSheetType.CLIP)) return@bottomSheetConfirmBtnClick
         dismiss()
       }
     }
