@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import designsystem.components.button.state.LinkMindButtonState
@@ -55,6 +56,14 @@ class LinkMindBlockButton @JvmOverloads constructor(
   fun btnClick(onClick: () -> Unit) {
     binding.clBtnMediumWidthLinkmind.onThrottleClick {
       onClick()
+    }
+  }
+
+  fun showLoadingUsingSaveLink(loadingText: String = "저장 중...") {
+    binding.apply {
+      progressBar.visibility = View.VISIBLE
+      tvBtn.text = loadingText
+      state = LinkMindButtonState.DISABLE
     }
   }
 

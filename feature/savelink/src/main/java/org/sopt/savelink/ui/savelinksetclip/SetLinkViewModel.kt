@@ -88,9 +88,10 @@ class SetLinkViewModel @Inject constructor(
   }
 
   private val mutex = Mutex()
-  fun saveLink(linkUrl: String, categoryId: Long?) = viewModelScope.launch {
+  fun saveLink(linkUrl: String, categoryId: Long?, func: () -> Unit) = viewModelScope.launch {
     if (!mutex.isLocked) {
       mutex.withLock {
+        func()
         saveLinkUseCase(
           PostSaveLinkUseCase.Param(
             linkUrl = linkUrl,
