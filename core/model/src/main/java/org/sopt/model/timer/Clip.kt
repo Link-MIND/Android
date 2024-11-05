@@ -1,4 +1,4 @@
-package org.sopt.timer.model
+package org.sopt.model.timer
 
 import org.sopt.model.category.Category
 

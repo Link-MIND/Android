@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import org.sopt.domain.category.category.usecase.GetCategoryAllUseCase
 import org.sopt.model.category.Category
 import org.sopt.model.timer.Repeat
-import org.sopt.timer.model.Clip
+import org.sopt.model.timer.Clip
 import org.sopt.timer.model.TimePicker
-import org.sopt.timer.model.toUiModel
+import org.sopt.model.timer.toUiModel
 import org.sopt.timer.usecase.FormatRepeatListToIntList
 import org.sopt.timer.usecase.FormatRepeatListToStringList
 import org.sopt.timer.usecase.PatchTimerUseCase

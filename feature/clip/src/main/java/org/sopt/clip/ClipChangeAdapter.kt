@@ -1,22 +1,31 @@
-package org.sopt.timer.settimer.clipselect
+package org.sopt.clip
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
-import org.sopt.timer.databinding.ItemTimerClipSelectBinding
+import org.sopt.clip.databinding.ItemClipChangeBinding
 import org.sopt.model.timer.Clip
 import org.sopt.ui.view.ItemDiffCallback
 
-class ClipSelectAdapter(
+class ClipChangeAdapter(
   private val onClick: (Clip, Int) -> Unit,
   private val context: Context,
-) : ListAdapter<Clip, ClipSelectViewHolder>(DiffUtil) {
+) : ListAdapter<Clip, ClipChangeViewHolder>(DiffUtil) {
   var selectedPosition = -1
-  override fun onBindViewHolder(holder: ClipSelectViewHolder, position: Int) {
+  override fun onBindViewHolder(holder: ClipChangeViewHolder, position: Int) {
     holder.onBind(getItem(position), position) { clip, position ->
       selectItemByPosition(position, clip)
       onClick(clip, position)
+    }
+
+    if (position == 0) {
+      val disMissClickColor = ContextCompat.getColor(context, org.sopt.mainfeature.R.color.neutrals400)
+      holder.binding.ivItemClipChange.setColorFilter(disMissClickColor)
+      holder.binding.tvItemClipChangeName.setTextColor(disMissClickColor)
+      holder.binding.tvItemClipChangeCount.setTextColor(disMissClickColor)
+      holder.binding.root.isEnabled = false
     }
   }
 
@@ -37,9 +46,9 @@ class ClipSelectAdapter(
     notifyItemChanged(position)
   }
 
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipSelectViewHolder {
-    return ClipSelectViewHolder(
-      ItemTimerClipSelectBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipChangeViewHolder {
+    return ClipChangeViewHolder(
+      ItemClipChangeBinding.inflate(LayoutInflater.from(parent.context), parent, false),
       context,
     )
   }
