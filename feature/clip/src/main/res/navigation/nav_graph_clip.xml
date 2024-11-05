@@ -67,7 +67,7 @@
   </fragment>
   <fragment
     android:id="@+id/navigation_clip_change"
-    android:name="org.sopt.clip.ClipChangeFragment"
+    android:name="org.sopt.clip.clipchange.ClipChangeFragment"
     android:label="ClipChangeFragment"
     tools:layout="@layout/fragment_clip_change">
     <argument

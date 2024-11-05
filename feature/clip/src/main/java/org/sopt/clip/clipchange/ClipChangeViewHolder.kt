@@ -1,4 +1,4 @@
-package org.sopt.clip
+package org.sopt.clip.clipchange
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView

@@ -1,11 +1,10 @@
 package org.sopt.clip.cliplink
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.clip.DeleteLinkBottomSheetFragment
 import org.sopt.clip.R
-import org.sopt.clip.clip.ClipFragmentDirections
 import org.sopt.clip.databinding.FragmentClipLinkBinding
 import org.sopt.common.util.delSpace
 import org.sopt.model.category.Category
@@ -33,7 +31,7 @@ import java.nio.charset.StandardCharsets
 
 @AndroidEntryPoint
 class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClipLinkBinding.inflate(it) }) {
-  private val viewModel: ClipLinkViewModel by viewModels()
+  private val viewModel: ClipLinkViewModel by activityViewModels()
   private lateinit var clipLinkAdapter: ClipLinkAdapter
   private var isDataNull: Boolean = true
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,6 +90,7 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
     updateLinkView()
     updateAllCount()
     updateLinkTitle(categoryId)
+    updateLinkTitles()
     onClickBackButton()
   }
 
@@ -144,6 +143,18 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
         else -> {
           initViewState(true)
         }
+      }
+    }.launchIn(viewLifeCycleScope)
+  }
+
+  private fun updateLinkTitles() {
+    viewModel.patchLinkCategory.flowWithLifecycle(viewLifeCycle).onEach { state ->
+      when (state) {
+        is UiState.Success -> {
+          requireContext().linkMindSnackBar(binding.vSnack, "클립 이동 완료", true)
+        }
+
+        else -> {}
       }
     }.launchIn(viewLifeCycleScope)
   }
@@ -257,8 +268,8 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
             DeleteLinkBottomSheetFragment.newInstance(
               clipId,
               isFullClipSize,
-              {requireContext().linkMindSnackBar(binding.vSnack, "클립 하나임", true)},
-                handleDeleteButton = {
+              { requireContext().linkMindSnackBar(binding.vSnack, "클립 하나임", true) },
+              handleDeleteButton = {
                 viewModel.deleteLink(linkDTO.toastId)
               },
               handleChangeButton = {

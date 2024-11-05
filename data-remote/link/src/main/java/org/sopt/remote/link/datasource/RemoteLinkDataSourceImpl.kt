@@ -3,6 +3,7 @@ package org.sopt.remote.link.datasource
 import org.sopt.data.link.datasource.RemoteLinkDataSource
 import org.sopt.remote.link.api.LinkService
 import org.sopt.remote.link.request.RequestIsReadDto
+import org.sopt.remote.link.request.RequestPatchCategoryDto
 import org.sopt.remote.link.request.RequestPatchTitleDto
 import org.sopt.remote.link.request.RequestWriteDto
 import javax.inject.Inject
@@ -37,4 +38,12 @@ class RemoteLinkDataSourceImpl @Inject constructor(
         title = title,
       ),
     ).data!!.updatedTitle
+
+  override suspend fun patchLinkCategory(toastId: Long, categoryId: Long): Long =
+    linkService.patchToastCategory(
+      RequestPatchCategoryDto(
+        toastId = toastId,
+        categoryId = categoryId
+      ),
+    ).data!!.categoryId
 }

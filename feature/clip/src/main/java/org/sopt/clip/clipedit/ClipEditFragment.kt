@@ -119,7 +119,7 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
     }
   }
 
-  fun editCategoryTitle() {
+  private fun editCategoryTitle() {
     viewModel.editTitleState.flowWithLifecycle(viewLifeCycle).onEach { state ->
       when (state) {
         is UiState.Success -> {

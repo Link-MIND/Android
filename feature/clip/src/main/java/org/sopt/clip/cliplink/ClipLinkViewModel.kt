@@ -12,6 +12,7 @@ import org.sopt.clip.SelectedToggle
 import org.sopt.domain.category.category.usecase.GetCategoryAllUseCase
 import org.sopt.domain.category.category.usecase.GetCategoryLinkUseCase
 import org.sopt.domain.link.usecase.DeleteLinkUseCase
+import org.sopt.domain.link.usecase.PatchLinkCategoryUseCase
 import org.sopt.domain.link.usecase.PatchLinkTitleUseCase
 import org.sopt.model.category.Category
 import org.sopt.model.category.CategoryLink
@@ -24,6 +25,7 @@ class ClipLinkViewModel @Inject constructor(
   private val deleteLinkUseCase: DeleteLinkUseCase,
   private val patchLinkTitleUseCase: PatchLinkTitleUseCase,
   private val getCategoryAll: GetCategoryAllUseCase,
+  private val patchLinkCategoryUseCase: PatchLinkCategoryUseCase,
 ) : ViewModel() {
   private val _linkState = MutableStateFlow<UiState<List<CategoryLink>>>(UiState.Empty)
   val linkState: StateFlow<UiState<List<CategoryLink>>> = _linkState.asStateFlow()
@@ -39,6 +41,9 @@ class ClipLinkViewModel @Inject constructor(
 
   private val _categoryState = MutableStateFlow<UiState<List<Category>>>(UiState.Empty)
   val categoryState: StateFlow<UiState<List<Category>>> = _categoryState.asStateFlow()
+
+  private val _patchLinkCategory = MutableStateFlow<UiState<Long>>(UiState.Empty)
+  val patchLinkCategory: StateFlow<UiState<Long>> = _patchLinkCategory.asStateFlow()
 
   var toggleSelectedPast: SelectedToggle = SelectedToggle.ALL
   fun deleteLink(toastId: Long) = viewModelScope.launch {
@@ -86,11 +91,16 @@ class ClipLinkViewModel @Inject constructor(
     }
   }
 
-  fun patchClipChange() {
-
+  fun patchLinkCategory(toastId: Long, categoryId: Long) = viewModelScope.launch {
+    patchLinkCategoryUseCase(param = PatchLinkCategoryUseCase.Param(toastId = toastId, categoryId = categoryId)).onSuccess {
+      _patchLinkCategory.emit(UiState.Success(it))
+    }.onFailure {
+      _patchLinkCategory.emit(UiState.Failure("fail"))
+    }
   }
 
   fun initState() {
     _linkState.value = UiState.Empty
+    _patchLinkCategory.value = UiState.Empty
   }
 }

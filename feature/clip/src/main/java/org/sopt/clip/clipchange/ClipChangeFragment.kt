@@ -1,7 +1,6 @@
-package org.sopt.clip
+package org.sopt.clip.clipchange
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -9,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import designsystem.components.button.state.LinkMindButtonState
+import designsystem.components.toast.linkMindSnackBar
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.clip.cliplink.ClipLinkViewModel
@@ -26,22 +26,17 @@ class ClipChangeFragment :
   BindingFragment<FragmentClipChangeBinding>({ FragmentClipChangeBinding.inflate(it) }) {
   private lateinit var clipAdapter: ClipChangeAdapter
   private val viewModel: ClipLinkViewModel by activityViewModels()
-  //TODO. 현재 id = 리스트에서 빼던지, id받아와서 리사이클러뷰 아이템에서 뺴기
-
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
     val args: ClipChangeFragmentArgs by navArgs()
-
     getCategoryAll()
     collectClipState(args)
     initCloseButtonClickListener()
   }
 
   private fun getCategoryAll() {
-      viewModel.getCategoryAll()
-
+    viewModel.getCategoryAll()
   }
 
   private fun collectClipState(args: ClipChangeFragmentArgs) {
@@ -69,7 +64,6 @@ class ClipChangeFragment :
     binding.btnClipChangeSelectNext.state = if (clipAdapter.selectedPosition != -1) LinkMindButtonState.ENABLE else LinkMindButtonState.DISABLE
     binding.rvClipChangeSelect.adapter = clipAdapter
     binding.rvClipChangeSelect.itemAnimator = null
-    initNextButtonClickListener()
   }
 
   private fun handleClipClick(
@@ -87,17 +81,19 @@ class ClipChangeFragment :
       list.onEach { it.isSelected = false }
       binding.btnClipChangeSelectNext.state = LinkMindButtonState.DISABLE
     }
+
+    initNextButtonClickListener(toastId, newClipId)
   }
 
-  private fun initNextButtonClickListener() {
+  private fun initNextButtonClickListener(toastId: Long, newClipId: Long) {
     binding.btnClipChangeSelectNext.btnClick {
-      Log.d("asdasd", "next")
+      viewModel.patchLinkCategory(toastId = toastId, categoryId = newClipId)
+      findNavController().popBackStack()
     }
   }
 
   private fun initCloseButtonClickListener() {
     binding.ivClipChangeClose.onThrottleClick {
-      Log.d("asdasd", "close")
       findNavController().popBackStack()
     }
   }
