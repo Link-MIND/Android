@@ -43,7 +43,7 @@ class RemoteLinkDataSourceImpl @Inject constructor(
     linkService.patchToastCategory(
       RequestPatchCategoryDto(
         toastId = toastId,
-        categoryId = categoryId
+        categoryId = categoryId,
       ),
     ).data!!.categoryId
 }

@@ -3,8 +3,8 @@ package org.sopt.timer.settimer.clipselect
 import android.content.Context
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.timer.databinding.ItemTimerClipSelectBinding
 import org.sopt.model.timer.Clip
+import org.sopt.timer.databinding.ItemTimerClipSelectBinding
 import org.sopt.ui.view.onThrottleClick
 
 class ClipSelectViewHolder(

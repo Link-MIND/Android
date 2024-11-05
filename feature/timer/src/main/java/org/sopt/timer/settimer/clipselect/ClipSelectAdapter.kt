@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import org.sopt.timer.databinding.ItemTimerClipSelectBinding
 import org.sopt.model.timer.Clip
+import org.sopt.timer.databinding.ItemTimerClipSelectBinding
 import org.sopt.ui.view.ItemDiffCallback
 
 class ClipSelectAdapter(
