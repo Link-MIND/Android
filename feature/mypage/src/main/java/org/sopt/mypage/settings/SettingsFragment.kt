@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
+import coil.load
+import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import designsystem.components.dialog.LinkMindDialog
 import kotlinx.coroutines.flow.launchIn
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.common.intentprovider.IntentProvider
 import org.sopt.common.intentprovider.LOGIN
 import org.sopt.datastore.datastore.SecurityDataStore
+import org.sopt.model.user.MyPageData
 import org.sopt.model.user.SettingPageData
 import org.sopt.mypage.R
 import org.sopt.mypage.databinding.FragmentSettingsBinding
@@ -122,6 +125,16 @@ class SettingsFragment : Fragment() {
       }
     }.launchIn(viewLifeCycleScope)
 
+    viewModel.getUserMyPage()
+    viewModel.myPageState.flowWithLifecycle(viewLifeCycle).onEach { state ->
+      when (state) {
+        is UiState.Success -> {
+          initMyPageData(state.data)
+        }
+        else -> {}
+      }
+    }.launchIn(viewLifeCycleScope)
+
     onClickToggle()
     onClickLogoutBtn()
     onClickCloseBtn()
@@ -197,6 +210,19 @@ class SettingsFragment : Fragment() {
       } else {
         tvSettingsAlertOff.isVisible = true
         settingsAlertToggle.initToggleState(false)
+      }
+    }
+  }
+
+  private fun initMyPageData(data: MyPageData) {
+    val myPage = data
+    if (myPage != null) {
+      with(binding) {
+        tvUserName.text = myPage.nickname
+        tvMyTotalLinkNum.text = myPage.allReadToast.toString()
+        tvReadLinkThisWeekNum.text = myPage.thisWeekendRead.toString()
+        tvSaveLinkThisWeekNum.text = myPage.thisWeekendSaved.toString()
+        ivProfile.load(data.profile) { transformations(CircleCropTransformation()) }
       }
     }
   }

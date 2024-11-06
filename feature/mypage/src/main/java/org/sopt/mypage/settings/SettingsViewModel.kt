@@ -9,8 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.auth.repository.AuthRepository
+import org.sopt.model.user.MyPageData
 import org.sopt.model.user.SettingPageData
 import org.sopt.ui.view.UiState
+import org.sopt.user.usecase.GetUserMyPageUseCase
 import org.sopt.user.usecase.GetUserSettingUseCase
 import org.sopt.user.usecase.PatchPushUseCase
 import javax.inject.Inject
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
   private val getUserSettingUseCase: GetUserSettingUseCase,
   private val patchPushUseCase: PatchPushUseCase,
+  private val getUserMyPageUseCase: GetUserMyPageUseCase,
   private val authRepository: AuthRepository,
 ) : ViewModel() {
   private val _logoutState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
@@ -29,6 +32,16 @@ class SettingsViewModel @Inject constructor(
 
   private val _settingState = MutableStateFlow<UiState<SettingPageData>>(UiState.Empty)
   val settingState: StateFlow<UiState<SettingPageData>> = _settingState.asStateFlow()
+
+  private val _myPageState = MutableStateFlow<UiState<MyPageData>>(UiState.Empty)
+  val myPageState: StateFlow<UiState<MyPageData>> = _myPageState.asStateFlow()
+  fun getUserMyPage() = viewModelScope.launch {
+    getUserMyPageUseCase.invoke().onSuccess { data ->
+      _myPageState.emit(UiState.Success(data))
+    }.onFailure { error ->
+      _myPageState.emit(UiState.Failure(error.toString()))
+    }
+  }
 
   val pushIsAllowed = MutableStateFlow(true)
 
