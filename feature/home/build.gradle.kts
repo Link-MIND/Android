@@ -18,4 +18,6 @@ dependencies {
   implementation(libs.jsoup)
   implementation(libs.orbit.core)
   implementation(libs.orbit.viewmodel)
+  implementation(libs.google.play.core)
+  implementation(projects.core.datastore)
 }

@@ -1,7 +1,9 @@
 package org.sopt.home
 
+import org.sopt.home.model.UpdatePriority
 import org.sopt.model.category.Category
 import org.sopt.model.home.RecentSavedLink
+import org.sopt.model.home.PopupInfo
 import org.sopt.model.home.RecommendLink
 import org.sopt.model.home.WeekBestLink
 
@@ -16,6 +18,8 @@ data class HomeState(
   val url: String = "",
   val categoryId: Long? = 0,
   val categoryName: String? = "전체 클립",
+  val popupList: List<PopupInfo> = emptyList(),
+  val marketUpdate: UpdatePriority = UpdatePriority.EMPTY,
 ) {
   fun calculateProgress(): Int {
     if (readToastNum > allToastNum) return 0
@@ -33,5 +37,7 @@ sealed interface HomeSideEffect {
   data object NavigateClipLink : HomeSideEffect
   data object NavigateAllClip : HomeSideEffect
   data object NavigateWebView : HomeSideEffect
+  data object ShowPopupInfo : HomeSideEffect
+  data object ShowUpdateDialog : HomeSideEffect
   data object NavigateSaveLink : HomeSideEffect
 }

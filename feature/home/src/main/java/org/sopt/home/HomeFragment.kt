@@ -12,6 +12,8 @@ import org.sopt.home.adapter.HomeWeekLinkAdapter
 import org.sopt.home.adapter.HomeWeekRecommendLinkAdapter
 import org.sopt.home.adapter.ItemDecoration
 import org.sopt.home.databinding.FragmentHomeBinding
+import org.sopt.home.model.UpdatePriority
+import org.sopt.model.home.PopupInfo
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.nav.DeepLinkUtil
 import org.sopt.ui.view.onThrottleClick
@@ -25,6 +27,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private lateinit var homeWeekLinkAdapter: HomeWeekLinkAdapter
   private lateinit var homeWeekRecommendLinkAdapter: HomeWeekRecommendLinkAdapter
   private val viewModel by viewModels<HomeViewModel>()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initView()
@@ -69,6 +72,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
         )
       }
       is HomeSideEffect.NavigateAllClip -> navigateToDestinationWithoutAnim("featureSaveLink://ClipLinkFragment/0/전체 클립")
+      is HomeSideEffect.ShowPopupInfo -> showPopupInfo(viewModel.container.stateFlow.value.popupList)
+      is HomeSideEffect.ShowUpdateDialog -> showUpdateDialog(viewModel.container.stateFlow.value.marketUpdate)
     }
   }
 
@@ -81,6 +86,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       getRecommendSite()
       getRecentSavedClip()
       getWeekBestLink()
+      getPopupListInfo()
+      checkMarketUpdateState()
     }
   }
 
@@ -150,5 +157,30 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       destination.delSpace(),
     )
     findNavController().navigate(request, navOptions)
+  }
+
+  private fun showPopupInfo(popupList: List<PopupInfo>) {
+    popupList.forEach {
+      if (viewModel.checkPopupDate(it.popupActiveStartDate, it.popupActiveEndDate)
+      ) {
+        val surveyDialog = SurveyDialogFragment.newInstance(
+          it.popupImage,
+          { viewModel.navigateWebview(it.popupLinkUrl) },
+          { viewModel.patchPopupInvisible(it.popupId.toLong(), 7) },
+          { viewModel.setPopupVisible() },
+        )
+        surveyDialog.show(parentFragmentManager, this.tag)
+      }
+    }
+  }
+
+  private fun showUpdateDialog(marketUpdate: UpdatePriority) {
+    if (marketUpdate != UpdatePriority.EMPTY) {
+      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(
+        marketUpdate,
+        { viewModel.setMarketUpdateVisible() },
+      )
+      marketUpdateDialog.show(parentFragmentManager, this.tag)
+    }
   }
 }
