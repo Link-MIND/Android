@@ -2,8 +2,8 @@ package org.sopt.home
 
 import org.sopt.home.model.UpdatePriority
 import org.sopt.model.category.Category
-import org.sopt.model.home.RecentSavedLink
 import org.sopt.model.home.PopupInfo
+import org.sopt.model.home.RecentSavedLink
 import org.sopt.model.home.RecommendLink
 import org.sopt.model.home.WeekBestLink
 

@@ -22,12 +22,11 @@ import org.sopt.datastore.datastore.SecurityDataStore
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
-import org.sopt.home.usecase.GetRecentSavedLink
 import org.sopt.home.usecase.GetPopupInfo
+import org.sopt.home.usecase.GetRecentSavedLink
 import org.sopt.home.usecase.GetRecommendSite
 import org.sopt.home.usecase.GetWeekBestLink
 import org.sopt.home.usecase.PatchPopupInvisible
-import org.sopt.model.category.Category
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
