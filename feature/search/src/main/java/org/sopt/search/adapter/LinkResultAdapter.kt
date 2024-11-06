@@ -1,11 +1,11 @@
-package org.sopt.clip.search.adapter
+package org.sopt.search.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import org.sopt.clip.databinding.ItemSearchLinkBinding
-import org.sopt.clip.search.viewholder.LinkResultViewHolder
 import org.sopt.model.category.Toast
+import org.sopt.search.databinding.ItemSearchLinkBinding
+import org.sopt.search.viewholder.LinkResultViewHolder
 import org.sopt.ui.view.ItemDiffCallback
 
 class LinkResultAdapter(
@@ -17,7 +17,6 @@ class LinkResultAdapter(
 
   fun setSearchQuery(query: String) {
     searchQuery = query
-    notifyDataSetChanged()
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LinkResultViewHolder {

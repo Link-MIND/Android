@@ -32,7 +32,6 @@ class ClipFragment : BindingFragment<FragmentClipBinding>({ FragmentClipBinding.
     viewModel.getCategoryAll()
     updateClipList()
     updateAllClipCount()
-    onClickSearchButton()
     onClickEditButton()
     onClickAddButton()
     isCheckClipCount()
@@ -131,12 +130,6 @@ class ClipFragment : BindingFragment<FragmentClipBinding>({ FragmentClipBinding.
   private fun onClickEditButton() {
     binding.btnClipEdit.onThrottleClick {
       findNavController().navigate(R.id.action_navigation_clip_to_navigation_clip_edit)
-    }
-  }
-
-  private fun onClickSearchButton() {
-    binding.clClipSearch.onThrottleClick {
-      navigateToDestination("featureMyPage://fragmentSearch")
     }
   }
 
