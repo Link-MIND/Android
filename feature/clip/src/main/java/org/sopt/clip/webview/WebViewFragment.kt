@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import designsystem.components.toast.linkMindSnackBar
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.clip.R
 import org.sopt.clip.databinding.FragmentWebviewBinding
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.context.hideKeyboard
@@ -83,6 +82,7 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     // initReadBtnClickLister()
     initNavigationBtnClickListener()
     initBrowserBtnClickListener()
+    initShareBtnClickListener()
     initEditorActionListener()
   }
 
@@ -193,6 +193,17 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
           if (wbClip.canGoForward()) org.sopt.mainfeature.R.color.neutrals800 else org.sopt.mainfeature.R.color.neutrals150,
         ),
       )
+    }
+  }
+
+  private fun initShareBtnClickListener(){
+    binding.ivShared.onThrottleClick {
+      val toasterShareIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, args.site)
+        type = "text/plain"
+      }
+      startActivity(Intent.createChooser(toasterShareIntent,null))
     }
   }
 
