@@ -1,12 +1,12 @@
-package org.sopt.clip.search.viewholder
+package org.sopt.search.viewholder
 
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import org.sopt.clip.databinding.ItemSearchLinkBinding
-import org.sopt.clip.search.util.applyBoldStyle
 import org.sopt.model.category.Toast
+import org.sopt.search.databinding.ItemSearchLinkBinding
+import org.sopt.search.util.applyBoldStyle
 import org.sopt.ui.view.onThrottleClick
 
 class LinkResultViewHolder(val binding: ItemSearchLinkBinding) :

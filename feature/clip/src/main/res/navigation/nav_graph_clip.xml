@@ -59,13 +59,6 @@
     android:label="ClipEditFragment"
     tools:layout="@layout/fragment_clip_edit" />
   <fragment
-    android:id="@+id/navigation_search"
-    android:name="org.sopt.clip.search.SearchFragment"
-    android:label="SearchFragment"
-    tools:layout="@layout/fragment_search">
-    <deepLink app:uri="featureMyPage://fragmentSearch" />
-  </fragment>
-  <fragment
     android:id="@+id/navigation_clip_change"
     android:name="org.sopt.clip.clipchange.ClipChangeFragment"
     android:label="ClipChangeFragment"

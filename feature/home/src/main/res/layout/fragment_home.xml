@@ -35,48 +35,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-      <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_home_search"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/shape_neutrals_fill_12_rect"
-        app:layout_constraintTop_toBottomOf="@+id/iv_home_setting"
-        android:layout_height="wrap_content">
-
-        <ImageView
-          android:id="@+id/iv_home_search"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@drawable/ic_search_20"
-          android:paddingVertical="11dp"
-          android:paddingStart="12dp"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          android:paddingEnd="8dp"/>
-
-        <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/home_enter_search_word"
-          android:textAppearance="@style/Typography.suit.regular_16"
-          android:textColor="@color/neutrals400"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintStart_toEndOf="@id/iv_home_search"
-          app:layout_constraintTop_toTopOf="parent" />
-
-      </androidx.constraintlayout.widget.ConstraintLayout>
-
       <TextView
         android:id="@+id/tv_home_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="20dp"
-        android:paddingTop="24dp"
+        android:paddingTop="18dp"
         android:text="@string/home_ex_user_name"
         android:textAppearance="@style/Typography.suit.bold_20"
         android:textColor="@color/neutrals900"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_home_search" />
+        app:layout_constraintTop_toBottomOf="@id/iv_tb_toaster" />
 
       <TextView
         android:layout_width="wrap_content"

@@ -144,7 +144,6 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
   fun navigateSaveLink() = intent { postSideEffect(HomeSideEffect.NavigateSaveLink) }
   fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }

@@ -33,7 +33,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     initView()
     collectState()
     navigateToSetting()
-    navigateToSearch()
     navigateToAllClip()
   }
 
@@ -59,7 +58,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
 
   private fun handleSideEffect(sideEffect: HomeSideEffect) {
     when (sideEffect) {
-      is HomeSideEffect.NavigateSearch -> navigateToDestination("featureMyPage://fragmentSearch")
       is HomeSideEffect.NavigateSetting -> navigateToDestination("featureMyPage://fragmentSetting")
       is HomeSideEffect.NavigateClipLink -> navigateToDestination(
         "featureSaveLink://ClipLinkFragment/${viewModel.container.stateFlow.value.categoryId}/${viewModel.container.stateFlow.value.categoryName}",
@@ -96,12 +94,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private fun navigateToSetting() {
     binding.ivHomeSetting.onThrottleClick {
       viewModel.navigateSetting()
-    }
-  }
-
-  private fun navigateToSearch() {
-    binding.clHomeSearch.onThrottleClick {
-      viewModel.navigateSearch()
     }
   }
 

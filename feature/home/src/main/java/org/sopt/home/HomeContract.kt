@@ -33,7 +33,6 @@ data class HomeState(
 
 sealed interface HomeSideEffect {
   data object NavigateSetting : HomeSideEffect
-  data object NavigateSearch : HomeSideEffect
   data object NavigateClipLink : HomeSideEffect
   data object NavigateAllClip : HomeSideEffect
   data object NavigateWebView : HomeSideEffect

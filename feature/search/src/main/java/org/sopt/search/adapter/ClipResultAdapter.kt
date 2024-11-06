@@ -1,11 +1,11 @@
-package org.sopt.clip.search.adapter
+package org.sopt.search.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import org.sopt.clip.databinding.ItemSearchResultClipBinding
-import org.sopt.clip.search.viewholder.ClipResultViewHolder
 import org.sopt.model.category.Category
+import org.sopt.search.databinding.ItemSearchResultClipBinding
+import org.sopt.search.viewholder.ClipResultViewHolder
 import org.sopt.ui.view.ItemDiffCallback
 
 class ClipResultAdapter(
@@ -17,7 +17,6 @@ class ClipResultAdapter(
 
   fun setSearchQuery(query: String) {
     searchQuery = query
-    notifyDataSetChanged()
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClipResultViewHolder {

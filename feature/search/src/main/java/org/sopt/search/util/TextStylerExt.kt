@@ -1,4 +1,4 @@
-package org.sopt.clip.search.util
+package org.sopt.search.util
 
 import android.graphics.Typeface
 import android.text.Spannable

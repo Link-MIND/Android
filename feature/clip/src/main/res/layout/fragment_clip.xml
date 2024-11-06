@@ -32,38 +32,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_clip_search"
-    android:layout_width="match_parent"
-    android:layout_marginHorizontal="20dp"
-    android:background="@drawable/shape_neutrals_fill_12_rect"
-    app:layout_constraintTop_toBottomOf="@+id/tv_clip_bar_title"
-    android:layout_height="wrap_content">
-
-    <ImageView
-      android:id="@+id/iv_clip_search"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@drawable/ic_search_20"
-      android:paddingVertical="11dp"
-      android:paddingStart="12dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      android:paddingEnd="8dp"/>
-
-    <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="@string/clip_enter_search_word"
-      android:textAppearance="@style/Typography.suit.regular_16"
-      android:textColor="@color/neutrals400"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toEndOf="@id/iv_clip_search"
-      app:layout_constraintTop_toTopOf="parent" />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
   <TextView
     android:id="@+id/tv_clip_all"
     android:layout_width="wrap_content"
@@ -74,7 +42,7 @@
     android:textAppearance="@style/Typography.suit.medium_12"
     android:textColor="@color/neutrals400"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/cl_clip_search" />
+    app:layout_constraintTop_toBottomOf="@id/tv_clip_bar_title" />
 
   <TextView
     android:id="@+id/tv_clip_all_count"
@@ -86,7 +54,7 @@
     android:textAppearance="@style/Typography.suit.medium_12"
     android:textColor="@color/neutrals400"
     app:layout_constraintStart_toEndOf="@id/tv_clip_all"
-    app:layout_constraintTop_toBottomOf="@id/cl_clip_search" />
+    app:layout_constraintTop_toBottomOf="@id/tv_clip_bar_title" />
 
   <ImageView
     android:layout_width="wrap_content"
@@ -111,7 +79,7 @@
     android:textAppearance="@style/Typography.suit.bold_12"
     android:textColor="@color/primary"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/cl_clip_search" />
+    app:layout_constraintTop_toBottomOf="@id/tv_clip_bar_title" />
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/rv_clip_clip"
