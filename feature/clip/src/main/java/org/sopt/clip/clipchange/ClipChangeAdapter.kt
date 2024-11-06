@@ -55,7 +55,7 @@ class ClipChangeAdapter(
 
   companion object {
     private val DiffUtil = ItemDiffCallback<Clip>(
-      onItemsTheSame = { old, new -> old == new },
+      onItemsTheSame = { old, new -> old.id == new.id },
       onContentsTheSame = { old, new -> old == new },
     )
   }
