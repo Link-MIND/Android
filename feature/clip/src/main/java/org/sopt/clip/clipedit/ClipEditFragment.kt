@@ -24,48 +24,33 @@ import org.sopt.ui.view.onThrottleClick
 class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClipEditBinding.inflate(it) }) {
   private val viewModel: ClipEditViewModel by viewModels()
   private lateinit var clipEditAdapter: ClipEditAdapter
-  private val itemTouchHelper by lazy {
-    ItemTouchHelper(ItemTouchCallback(clipEditAdapter))
-  }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    clipEditAdapter = ClipEditAdapter(
-      { itemId, state, position, title ->
-        when (state) {
-          "delete" -> {
-            showDeleteDialog(itemId, title)
-          }
-
-          "edit" -> {
-            showHomeBottomSheet(itemId, title)
-          }
+    clipEditAdapter = ClipEditAdapter { itemId, state, position, title ->
+      when (state) {
+        "delete" -> {
+          showDeleteDialog(itemId, title)
         }
-      },
-      deleteClip = {
-        viewModel.deleteCategory(it)
-      },
-      onLongClick = {
-        viewModel.last2.flowWithLifecycle(viewLifeCycle).onEach { state ->
-          when (state) {
-            is UiState.Success -> {
-              viewModel.patchCategoryEditPriority(it, state.data + 1)
-            }
 
-            else -> {}
-          }
-        }.launchIn(viewLifeCycleScope)
-      },
-      onLongClick2 = {
-        viewModel.update2(it.toInt())
-      },
-    )
+        "edit" -> {
+          showHomeBottomSheet(itemId, title)
+        }
+      }
+    }
     binding.rvClipEdit.adapter = clipEditAdapter
-    itemTouchHelper.attachToRecyclerView(binding.rvClipEdit)
+    val callback = ItemTouchCallback(
+      adapter = clipEditAdapter,
+      recyclerView = binding.rvClipEdit,
+    ) { categoryId, newIndex ->
+      if (categoryId != null) viewModel.updateCategoryEditPriorityState(categoryId, newIndex)
+    }
+    ItemTouchHelper(callback).attachToRecyclerView(binding.rvClipEdit)
     updateEditListView()
     updateDelete()
     onClickBackButton()
+    editCategoryPriority()
   }
 
   private fun updateEditListView() {
@@ -117,7 +102,7 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
     }
   }
 
-  fun editCategoryTitle() {
+  private fun editCategoryTitle() {
     viewModel.editTitleState.flowWithLifecycle(viewLifeCycle).onEach { state ->
       when (state) {
         is UiState.Success -> {
@@ -143,5 +128,17 @@ class ClipEditFragment : BindingFragment<FragmentClipEditBinding>({ FragmentClip
         deleteDialog.dismiss()
       }
       .show()
+  }
+
+  private fun editCategoryPriority() {
+    viewModel.categoryEditPriorityState.flowWithLifecycle(viewLifeCycle).onEach { state ->
+      when (state) {
+        is UiState.Success -> {
+          viewModel.patchCategoryEditPriority(state.data.first, state.data.second)
+        }
+
+        else -> {}
+      }
+    }.launchIn(viewLifeCycleScope)
   }
 }
