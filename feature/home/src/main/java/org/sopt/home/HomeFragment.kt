@@ -14,6 +14,7 @@ import org.sopt.home.adapter.HomeWeekLinkAdapter
 import org.sopt.home.adapter.HomeWeekRecommendLinkAdapter
 import org.sopt.home.adapter.ItemDecoration
 import org.sopt.home.databinding.FragmentHomeBinding
+import org.sopt.home.model.UpdatePriority
 import org.sopt.model.home.PopupInfo
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.nav.DeepLinkUtil
@@ -28,6 +29,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private lateinit var homeWeekLinkAdapter: HomeWeekLinkAdapter
   private lateinit var homeWeekRecommendLinkAdapter: HomeWeekRecommendLinkAdapter
   private val viewModel by viewModels<HomeViewModel>()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initView()
@@ -73,6 +75,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       }
 
       is HomeSideEffect.ShowPopupInfo -> showPopupInfo(viewModel.container.stateFlow.value.popupList)
+      is HomeSideEffect.ShowUpdateDialog -> showUpdateDialog(viewModel.container.stateFlow.value.marketUpdate)
     }
   }
 
@@ -85,6 +88,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       getRecommendSite()
       getWeekBestLink()
       getPopupListInfo()
+      checkMarketUpdateState()
     }
   }
 
@@ -169,9 +173,20 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
           it.popupImage,
           { viewModel.navigateWebview(it.popupLinkUrl) },
           { viewModel.patchPopupInvisible(it.popupId.toLong(), 7) },
+          { viewModel.setPopupVisible() },
         )
         surveyDialog.show(parentFragmentManager, this.tag)
       }
+    }
+  }
+
+  private fun showUpdateDialog(marketUpdate: UpdatePriority) {
+    if (marketUpdate != UpdatePriority.EMPTY) {
+      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(
+        marketUpdate,
+        { viewModel.setMarketUpdateVisible() },
+      )
+      marketUpdateDialog.show(parentFragmentManager, this.tag)
     }
   }
 }

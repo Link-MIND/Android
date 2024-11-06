@@ -5,16 +5,19 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import coil.load
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.home.databinding.FragmentSurveyDialogBinding
 import org.sopt.ui.base.BindingDialogFragment
 import org.sopt.ui.view.onThrottleClick
 
+@AndroidEntryPoint
 class SurveyDialogFragment : BindingDialogFragment<FragmentSurveyDialogBinding>(
   { FragmentSurveyDialogBinding.inflate(it) },
 ) {
   private var imageUrl: String? = null
   private var linkUrl: () -> Unit = {}
   private var handleSkip: () -> Unit = {}
+  private var popupVisibility: () -> Unit = {}
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -24,7 +27,7 @@ class SurveyDialogFragment : BindingDialogFragment<FragmentSurveyDialogBinding>(
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-
+    popupVisibility.invoke()
     setSurveyImage(imageUrl)
 
     binding.ivSurveyDialogClose.onThrottleClick {
@@ -54,7 +57,12 @@ class SurveyDialogFragment : BindingDialogFragment<FragmentSurveyDialogBinding>(
     binding.ivSurveyDialog.load(text)
 
   companion object {
-    fun newInstance(imageUrl: String, onNavigateWebView: () -> Unit, onNegativeButtonClick: () -> Unit): SurveyDialogFragment {
+    fun newInstance(
+      imageUrl: String,
+      onNavigateWebView: () -> Unit,
+      onNegativeButtonClick: () -> Unit,
+      setPopupVisibility: () -> Unit,
+    ): SurveyDialogFragment {
       val args = Bundle().apply {
         putString("imageUrl", imageUrl)
       }
@@ -62,8 +70,8 @@ class SurveyDialogFragment : BindingDialogFragment<FragmentSurveyDialogBinding>(
         arguments = args
         linkUrl = onNavigateWebView
         handleSkip = onNegativeButtonClick
+        popupVisibility = setPopupVisibility
       }
-      // 얘는 bundle 안해도ㅗ되나?
     }
   }
 }

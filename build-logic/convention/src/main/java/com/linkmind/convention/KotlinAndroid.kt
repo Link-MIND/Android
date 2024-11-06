@@ -28,6 +28,11 @@ internal fun Project.configureKotlinAndroid(
         "KAKAO_NATIVE_KEY",
         gradleLocalProperties(rootDir).getProperty("kakao.native.key")
       )
+      buildConfigField(
+        "String",
+        "AMPLITUDE_KEY",
+        gradleLocalProperties(rootDir).getProperty("amplitude.key")
+      )
       manifestPlaceholders["KAKAO_NATIVE_KEY"] = gradleLocalProperties(rootDir).getProperty("kakaoNativeKey")
     }
 
