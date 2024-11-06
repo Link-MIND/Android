@@ -35,6 +35,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     navigateToSetting()
     navigateToSearch()
     navigateToAllClip()
+    viewModel.checkMarketUpdateState()
   }
 
   private fun initView() {
@@ -89,7 +90,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       getRecentSavedClip()
       getWeekBestLink()
       getPopupListInfo()
-      checkMarketUpdateState()
     }
   }
 

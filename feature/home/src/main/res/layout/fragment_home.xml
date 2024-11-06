@@ -194,8 +194,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_arrow_black_svg"
-        android:paddingBottom="7dp"
+        android:paddingStart="40dp"
         android:paddingEnd="26dp"
+        android:paddingVertical="7dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/tv_home_user_clip_name"/>
 

@@ -196,14 +196,14 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     }
   }
 
-  private fun initShareBtnClickListener(){
+  private fun initShareBtnClickListener() {
     binding.ivShared.onThrottleClick {
       val toasterShareIntent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, args.site)
         type = "text/plain"
       }
-      startActivity(Intent.createChooser(toasterShareIntent,null))
+      startActivity(Intent.createChooser(toasterShareIntent, null))
     }
   }
 
