@@ -1,24 +1,24 @@
 package org.sopt.home.viewholder
 
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import org.sopt.home.databinding.ItemHomeClipBinding
-import org.sopt.model.category.Category
+import org.sopt.model.home.RecentSavedLink
+import org.sopt.ui.view.onThrottleClick
 
 class HomeClipViewHolder(
   private val binding: ItemHomeClipBinding,
-  private val onClickClip: (Category) -> Unit,
+  private val onClickClip: (RecentSavedLink) -> Unit,
   private val onClickEmptyClip: () -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-  fun onBind(data: Category?, position: Int) {
-    if (position == 0) {
-      binding.ivHomeClip.setImageResource(org.sopt.mainfeature.R.drawable.ic_clip_all_24)
-    }
+  fun onBind(data: RecentSavedLink?, position: Int) {
     if (data == null) {
       with(binding) {
-        clItemClip.isGone = true
-        clItemClipEmpty.isVisible = true
+        clHomeItemClip.isGone = true
+        clHomeItemClipEmpty.isVisible = true
         root.setOnClickListener {
           onClickEmptyClip()
         }
@@ -26,11 +26,19 @@ class HomeClipViewHolder(
       return
     }
     with(binding) {
-      tvItemClipTitle.text = data.categoryTitle
-      tvItemClipCount.text = data.toastNum.toString() + "개"
-      root.setOnClickListener {
-        onClickClip(data)
+      tvLinkTitle.text = data.toastTitle
+      tvLinkUrl.text = data.linkUrl
+      binding.tvLinkTitle.setVisible(!data.categoryTitle.isNullOrEmpty())
+      tvLinkClipTitle.text = data.categoryTitle
+      ivLinkThumnail.load(data.thumbnailUrl)
+      tvItemClipLink.setVisible(data.isRead)
+      root.onThrottleClick {
+        onClickClip.invoke(data)
       }
     }
+  }
+
+  private fun View.setVisible(value: Boolean) {
+    visibility = if (value) View.VISIBLE else View.GONE
   }
 }

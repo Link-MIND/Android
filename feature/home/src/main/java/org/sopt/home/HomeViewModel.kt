@@ -23,10 +23,10 @@ import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
 import org.sopt.home.usecase.GetPopupInfo
+import org.sopt.home.usecase.GetRecentSavedLink
 import org.sopt.home.usecase.GetRecommendSite
 import org.sopt.home.usecase.GetWeekBestLink
 import org.sopt.home.usecase.PatchPopupInvisible
-import org.sopt.model.category.Category
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -38,6 +38,7 @@ class HomeViewModel @Inject constructor(
   private val getMainPageUserClip: GetMainPageUserClip,
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
+  private val getRecentSavedLink: GetRecentSavedLink,
   private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
   private val patchPopupInvisible: PatchPopupInvisible,
   private val getPopupInfo: GetPopupInfo,
@@ -46,39 +47,33 @@ class HomeViewModel @Inject constructor(
   override val container: Container<HomeState, HomeSideEffect> =
     container(HomeState())
 
-  fun saveCategoryTitle(categoryTitle: String) = viewModelScope.launch {
-    postAddCategoryTitle(
-      PostAddCategoryTitleUseCase.Param(
-        categoryTitle = categoryTitle,
-      ),
-    ).onSuccess {
-      getMainPageUserClip()
-    }.onFailure { Log.d("saveCategoryTitleFail", "$it") }
-  }
-
   fun getMainPageUserClip() = intent {
     getMainPageUserClip.invoke().onSuccess {
       reduce {
-        val tempCategoryList = listOf(
-          Category(
-            0,
-            "전체 카테고리",
-            it.allToastNum.toLong(),
-          ),
-        ) + it.mainCategoryDto
-        val categoryList = if (tempCategoryList.size < 4) tempCategoryList + null else tempCategoryList
-        val finalCategoryList = categoryList.distinctBy { it?.categoryId }
         state.copy(
           nickName = it.nickName,
           allToastNum = it.allToastNum,
           readToastNum = it.readToastNum,
-          categoryList = (
-            finalCategoryList
-            ),
         )
       }
     }.onFailure {
       Log.d("MainUser", "$it")
+    }
+  }
+
+  fun getRecentSavedClip() = intent {
+    getRecentSavedLink.invoke().onSuccess {
+      if (it.isEmpty()) {
+        reduce {
+          state.copy(recentSavedLink = listOf(null))
+        }
+      } else {
+        reduce {
+          state.copy(recentSavedLink = (container.stateFlow.value.recentSavedLink + it).distinctBy { it?.toastId })
+        }
+      }
+    }.onFailure {
+      Log.d("RecentSaved", "$it")
     }
   }
 
@@ -151,18 +146,8 @@ class HomeViewModel @Inject constructor(
 
   fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
-  fun showBottomSheet() = intent { postSideEffect(HomeSideEffect.ShowBottomSheet) }
-
-  @OptIn(OrbitExperimental::class)
-  fun navigateClipLink(categoryId: Long?, categoryName: String?) = blockingIntent {
-    reduce {
-      state.copy(
-        categoryId = categoryId,
-        categoryName = categoryName,
-      )
-    }
-    postSideEffect(HomeSideEffect.NavigateClipLink)
-  }
+  fun navigateSaveLink() = intent { postSideEffect(HomeSideEffect.NavigateSaveLink) }
+  fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
   fun navigateWebview(url: String) = blockingIntent {

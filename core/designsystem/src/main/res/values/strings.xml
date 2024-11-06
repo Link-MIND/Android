@@ -152,9 +152,11 @@
   <string name="home_unforget_read">잊지 않고 읽었어요!</string>
   <string name="home_toast_progress_link">nn</string>
   <string name="home_all_toast_ex_num">/nn</string>
-  <string name="home_user_clip">님의 클립</string>
+  <string name="home_user_clip">님이 최근 저장한 링크</string>
   <string name="home_this_week_link">이주의 링크</string>
   <string name="home_this_week_recommend">이주의 추천 사이트</string>
+  <string name="home_item_link_empty">첫번째 링크를 저장해보세요</string>
+
   <string name="home_survey_title">1분 설문조사 참여하고\n스타벅스 기프티콘 받기</string>
   <string name="home_survey_subtitle">토스터 사용 피드백을 남겨주시면\n추첨을 통해 기프티콘을 드려요!</string>
   <string name="home_survey_button">참여하기</string>
