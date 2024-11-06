@@ -15,9 +15,14 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.usecase.GetMainPageUserClip
+import org.sopt.home.usecase.GetPopupInfo
 import org.sopt.home.usecase.GetRecommendSite
 import org.sopt.home.usecase.GetWeekBestLink
+import org.sopt.home.usecase.PatchPopupInvisible
 import org.sopt.model.category.Category
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +31,8 @@ class HomeViewModel @Inject constructor(
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
   private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
+  private val patchPopupInvisible: PatchPopupInvisible,
+  private val getPopupInfo: GetPopupInfo,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
   override val container: Container<HomeState, HomeSideEffect> =
     container(HomeState())
@@ -86,6 +93,29 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun getPopupListInfo() = intent {
+    getPopupInfo.invoke().onSuccess {
+      postSideEffect(HomeSideEffect.ShowPopupInfo)
+      reduce {
+        state.copy(popupList = it)
+      }
+    }.onFailure {
+      Log.d("getPopupListInfo", "$it")
+    }
+  }
+
+  fun patchPopupInvisible(popupId: Long, hideDate: Long) {
+    viewModelScope.launch {
+      patchPopupInvisible.invoke(popupId, hideDate)
+        .onSuccess {
+          Log.d("patchPopupInvisible", "$it")
+        }
+        .onFailure {
+          Log.d("patchPopupInvisible", "$it")
+        }
+    }
+  }
+
   fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
   fun showBottomSheet() = intent { postSideEffect(HomeSideEffect.ShowBottomSheet) }
@@ -105,5 +135,13 @@ class HomeViewModel @Inject constructor(
   fun navigateWebview(url: String) = blockingIntent {
     reduce { state.copy(url = url) }
     postSideEffect(HomeSideEffect.NavigateWebView)
+  }
+
+  fun checkPopupDate(activeStartDate: String, activeEndDate: String): Boolean {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val today = Calendar.getInstance().time
+    val startDate = dateFormat.parse(activeStartDate)
+    val endDate = dateFormat.parse(activeEndDate)
+    return today.after(startDate) && today.before(endDate) || today == startDate || today == endDate
   }
 }
