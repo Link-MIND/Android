@@ -189,18 +189,27 @@
         app:layout_constraintStart_toEndOf="@+id/tv_home_user_clip_name"
         app:layout_constraintTop_toTopOf="@id/tv_home_user_clip_name" />
 
+      <ImageView
+        android:id="@+id/iv_recent_clip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_black_svg"
+        android:paddingBottom="7dp"
+        android:paddingEnd="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/tv_home_user_clip_name"/>
+
       <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home_clip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:nestedScrollingEnabled="false"
+        android:layout_height="0dp"
         android:paddingHorizontal="20dp"
-        android:paddingTop="15dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:paddingTop="14dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_home_user_clip_name"
-        app:spanCount="2"
+        tools:itemCount="2"
         tools:listitem="@layout/item_home_clip" />
 
       <View

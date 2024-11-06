@@ -2,67 +2,125 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/item_link"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginBottom="12dp">
+  android:layout_marginBottom="8dp"
+  android:background="@drawable/shape_white_fill_12_rect">
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_item_clip"
+    android:id="@+id/cl_home_item_clip"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="12dp">
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/cv_link_thumnail"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_white_fill_12_rect"
-    android:paddingTop="12dp"
-    android:paddingBottom="16dp"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="8dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
     <ImageView
-      android:id="@+id/iv_home_clip"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:paddingStart="12dp"
-      android:src="@drawable/ic_clip_24"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+      android:id="@+id/iv_link_thumnail"
+      android:layout_width="74dp"
+      android:layout_height="74dp"
+      android:adjustViewBounds="true"
+      android:elevation="0dp"
+      android:scaleType="centerCrop"
+      android:src="@drawable/img_link_thumb"
+      app:layout_constraintDimensionRatio="1:1" />
+  </androidx.cardview.widget.CardView>
+
+
+  <TextView
+    android:id="@+id/tv_item_clip_link"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@drawable/shape_grey900_fill_8_rect"
+    android:elevation="10dp"
+    android:gravity="center"
+    android:text="@string/clip_already_read"
+    android:textAppearance="@style/Typography.suit.medium_12"
+    android:textColor="@color/neutrals100"
+    app:layout_constraintBottom_toBottomOf="@id/cv_link_thumnail"
+    app:layout_constraintEnd_toEndOf="@id/cv_link_thumnail"
+    app:layout_constraintStart_toStartOf="@id/cv_link_thumnail"
+    app:layout_constraintTop_toTopOf="@id/cv_link_thumnail" />
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_link_clip_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginTop="12dp"
+    app:layout_constraintStart_toEndOf="@id/cv_link_thumnail"
+    app:layout_constraintTop_toTopOf="parent">
 
     <TextView
-      android:id="@+id/tv_item_clip_title"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:maxLines="1"
-      android:paddingHorizontal="12dp"
-      android:paddingTop="8dp"
-      android:paddingBottom="23dp"
-      android:textAppearance="@style/Typography.suit.medium_16"
-      android:textColor="@color/neutrals900"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/iv_home_clip"
-      tools:text="전체 클립" />
-
-    <TextView
-      android:id="@+id/tv_item_clip_count"
+      android:id="@+id/tv_link_clip_title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:paddingStart="12dp"
-      android:paddingTop="11dp"
-      android:textAppearance="@style/Typography.suit.bold_14"
-      android:textColor="@color/neutrals700"
+      android:background="@drawable/shape_red_fill_8_rect"
+      android:paddingHorizontal="8dp"
+      android:paddingVertical="4dp"
+      android:textAppearance="@style/Typography.suit.medium_10"
+      android:textColor="@color/accessible800"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/tv_item_clip_title"
-      tools:text="n개" />
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="세부 클립명" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <TextView
+    android:id="@+id/tv_link_title"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="45dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:text="@string/clip_text_title"
+    android:textAppearance="@style/Typography.suit.semibold_16"
+    android:textColor="@color/neutrals850"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/cv_link_thumnail"
+    app:layout_constraintTop_toBottomOf="@id/cl_link_clip_title" />
+
+  <TextView
+    android:id="@+id/tv_link_url"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="6dp"
+    android:layout_marginTop="18dp"
+    android:layout_marginEnd="20dp"
+    android:ellipsize="end"
+    android:maxLines="1"
+    android:text="@string/clip_ex_url"
+    android:textAppearance="@style/Typography.suit.medium_10"
+    android:textColor="@color/neutrals200"
+    app:layout_constraintBottom_toBottomOf="@id/cv_link_thumnail"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/cv_link_thumnail" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_item_clip_empty"
+    android:id="@+id/cl_home_item_clip_empty"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/shape_test"
     android:paddingVertical="34dp"
     android:paddingTop="12dp"
     android:paddingBottom="16dp"
     android:visibility="gone"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
 
     <ImageView
       android:id="@+id/iv_elipse"
@@ -89,7 +147,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:paddingTop="1dp"
-      android:text="@string/clip_add_clip"
+      android:text="@string/home_item_link_empty"
       android:textAppearance="@style/Typography.suit.bold_14"
       android:textColor="@color/neutrals200"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -98,3 +156,4 @@
       app:layout_constraintTop_toBottomOf="@id/iv_elipse" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
