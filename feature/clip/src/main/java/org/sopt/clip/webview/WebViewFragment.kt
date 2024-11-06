@@ -71,7 +71,7 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
         }
 
         false -> {
-          binding.ivRead.setImageResource(R.drawable.ic_read_before_24)
+          binding.ivRead.setImageResource(org.sopt.mainfeature.R.drawable.ic_read_before_24)
           if (isPatched) requireActivity().linkMindSnackBar(binding.clBottomBar, "열람 취소")
         }
       }
