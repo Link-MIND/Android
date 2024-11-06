@@ -64,6 +64,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateClipLink -> navigateToDestination(
         "featureSaveLink://ClipLinkFragment/${viewModel.container.stateFlow.value.categoryId}/${viewModel.container.stateFlow.value.categoryName}",
       )
+
       is HomeSideEffect.NavigateSaveLink -> navigateToDestinationWithoutAnim("featureSaveLink://saveLinkFragment?clipboardLink=")
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
@@ -71,6 +72,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
           "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
         )
       }
+
       is HomeSideEffect.NavigateAllClip -> navigateToDestinationWithoutAnim("featureSaveLink://ClipLinkFragment/0/전체 클립")
       is HomeSideEffect.ShowPopupInfo -> showPopupInfo(viewModel.container.stateFlow.value.popupList)
       is HomeSideEffect.ShowUpdateDialog -> showUpdateDialog(viewModel.container.stateFlow.value.marketUpdate)

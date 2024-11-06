@@ -30,10 +30,12 @@ class LinkMindBottomSheet(context: Context) {
       window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE)
       binding.etvBottomSheet.editText.requestFocus()
     }
+  }
 
+  fun setBottomSheetType(bottomSheetType: BottomSheetType) {
     binding.etvBottomSheet.apply {
       throttleAfterTextChanged {
-        handleTextChange()
+        handleTextChange(bottomSheetType)
       }
 
       onClickTextClear {
@@ -43,6 +45,7 @@ class LinkMindBottomSheet(context: Context) {
       }
     }
   }
+
   fun setBottomSheetHint(@StringRes textId: Int) {
     binding.etvBottomSheet.editText.setHint(textId)
   }
@@ -62,8 +65,8 @@ class LinkMindBottomSheet(context: Context) {
     }
   }
 
-  fun handleTextChange() {
-    val isError = showErrorMsg()
+  private fun handleTextChange(bottomSheetType: BottomSheetType) {
+    val isError = showErrorMsg(bottomSheetType)
     binding.apply {
       tvBottomSheetErrorText.isVisible = isError
       if (isError) binding.etvBottomSheet.editText.filters = arrayOf(InputFilter.LengthFilter(16))
@@ -76,7 +79,18 @@ class LinkMindBottomSheet(context: Context) {
   fun setTitle(@StringRes textId: Int) {
     binding.tvBottomSheetTitle.setText(textId)
   }
-  fun showErrorMsg(): Boolean = binding.etvBottomSheet.editText.text.length > 15 || binding.etvBottomSheet.editText.text.isEmpty()
+
+  fun showErrorMsg(bottomSheetType: BottomSheetType): Boolean {
+    return when (bottomSheetType) {
+      BottomSheetType.LINK -> {
+        binding.etvBottomSheet.editText.text.isEmpty()
+      }
+
+      BottomSheetType.CLIP -> {
+        binding.etvBottomSheet.editText.text.length > 15 || binding.etvBottomSheet.editText.text.isEmpty()
+      }
+    }
+  }
 
   fun setErroMsg(@StringRes textId: Int) {
     binding.tvBottomSheetErrorText.setText(textId)

@@ -8,11 +8,10 @@
     android:id="@+id/navigation_clip"
     android:name="org.sopt.clip.clip.ClipFragment"
     android:label="fragment_clip"
-    tools:layout="@layout/fragment_clip" >
+    tools:layout="@layout/fragment_clip">
     <action
       android:id="@+id/action_navigation_clip_to_navigation_clip_link"
-      app:destination="@id/navigation_clip_link" >
-    </action>
+      app:destination="@id/navigation_clip_link"></action>
     <action
       android:id="@+id/action_navigation_clip_to_navigation_clip_edit"
       app:destination="@id/navigation_clip_edit" />
@@ -24,20 +23,22 @@
     tools:layout="@layout/fragment_clip_link">
     <argument
       android:name="categoryId"
-      app:argType="long"/>
+      app:argType="long" />
     <argument
       android:name="categoryName"
-      app:argType="string"/>
-    <deepLink
-      app:uri="featureSaveLink://ClipLinkFragment/{categoryId}/{categoryName}" />
+      app:argType="string" />
+    <deepLink app:uri="featureSaveLink://ClipLinkFragment/{categoryId}/{categoryName}" />
     <action
       android:id="@+id/action_navigation_clip_link_to_webViewFragment"
       app:destination="@id/webViewFragment" />
+    <action
+      android:id="@+id/action_navigation_clip_link_to_clipChangeFragment"
+      app:destination="@id/navigation_clip_change" />
   </fragment>
   <fragment
     android:id="@+id/webViewFragment"
     android:name="org.sopt.clip.webview.WebViewFragment"
-    android:label="WebViewFragment" >
+    android:label="WebViewFragment">
     <argument
       android:name="site"
       app:argType="string" />
@@ -50,19 +51,31 @@
     <argument
       android:name="isMylink"
       app:argType="boolean" />
-    <deepLink
-      app:uri="featureSaveLink://webViewFragment/{toastId}/{isRead}/{isMylink}/{site}" />
+    <deepLink app:uri="featureSaveLink://webViewFragment/{toastId}/{isRead}/{isMylink}/{site}" />
   </fragment>
   <fragment
     android:id="@+id/navigation_clip_edit"
     android:name="org.sopt.clip.clipedit.ClipEditFragment"
     android:label="ClipEditFragment"
-    tools:layout="@layout/fragment_clip_edit"/>
+    tools:layout="@layout/fragment_clip_edit" />
   <fragment
     android:id="@+id/navigation_search"
     android:name="org.sopt.clip.search.SearchFragment"
     android:label="SearchFragment"
-    tools:layout="@layout/fragment_search" >
+    tools:layout="@layout/fragment_search">
     <deepLink app:uri="featureMyPage://fragmentSearch" />
+  </fragment>
+  <fragment
+    android:id="@+id/navigation_clip_change"
+    android:name="org.sopt.clip.clipchange.ClipChangeFragment"
+    android:label="ClipChangeFragment"
+    tools:layout="@layout/fragment_clip_change">
+    <argument
+      android:name="clipId"
+      app:argType="long" />
+    <argument
+      android:name="toastId"
+      app:argType="long" />
+    <deepLink app:uri="featureClipChange://clipChangeFragment/{clipId}/{toastId}" />
   </fragment>
 </navigation>

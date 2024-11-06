@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
+import designsystem.components.bottomsheet.BottomSheetType
 import designsystem.components.bottomsheet.LinkMindBottomSheet
 import designsystem.components.toast.linkMindSnackBar
 import kotlinx.coroutines.flow.launchIn
@@ -17,6 +18,7 @@ import org.sopt.clip.DeleteLinkBottomSheetFragment
 import org.sopt.clip.R
 import org.sopt.clip.databinding.FragmentClipLinkBinding
 import org.sopt.common.util.delSpace
+import org.sopt.model.category.Category
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.fragment.colorOf
 import org.sopt.ui.fragment.viewLifeCycle
@@ -29,12 +31,14 @@ import java.nio.charset.StandardCharsets
 
 @AndroidEntryPoint
 class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClipLinkBinding.inflate(it) }) {
-  private val viewModel: ClipLinkViewModel by viewModels()
+  private val viewModel: ClipLinkViewModel by activityViewModels()
   private lateinit var clipLinkAdapter: ClipLinkAdapter
-  var isDataNull: Boolean = true
+  private var isDataNull: Boolean = true
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel.initState()
+    viewModel.getCategoryAll()
+
     val args: ClipLinkFragmentArgs by navArgs()
     val categoryId = args.categoryId
     val categoryName = args.categoryName
@@ -80,12 +84,13 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
         binding.tvClipLinkRead,
       )
     }
-    initClipAdapter()
+    initClipAdapter(args.categoryId)
     initViewState(isDataNull)
     updateLinkDelete(categoryId)
     updateLinkView()
     updateAllCount()
     updateLinkTitle(categoryId)
+    updateLinkTitles()
     onClickBackButton()
   }
 
@@ -127,6 +132,7 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
       }
     }.launchIn(viewLifeCycleScope)
   }
+
   private fun updateAllCount() {
     viewModel.allClipCount.flowWithLifecycle(viewLifeCycle).onEach { state ->
       when (state) {
@@ -137,6 +143,18 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
         else -> {
           initViewState(true)
         }
+      }
+    }.launchIn(viewLifeCycleScope)
+  }
+
+  private fun updateLinkTitles() {
+    viewModel.patchLinkCategory.flowWithLifecycle(viewLifeCycle).onEach { state ->
+      when (state) {
+        is UiState.Success -> {
+          requireContext().linkMindSnackBar(binding.vSnack, "클립 이동 완료", true)
+        }
+
+        else -> {}
       }
     }.launchIn(viewLifeCycleScope)
   }
@@ -237,7 +255,7 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
     }
   }
 
-  private fun initClipAdapter() {
+  private fun initClipAdapter(clipId: Long) {
     clipLinkAdapter = ClipLinkAdapter { linkDTO, state ->
       when (state) {
         "click" -> {
@@ -245,15 +263,23 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
         }
 
         "delete" -> {
-          DeleteLinkBottomSheetFragment.newInstance(
-            linkDTO.toastId.toInt(),
-            handleDeleteButton = {
-              viewModel.deleteLink(linkDTO.toastId)
-            },
-            handleModifyButton = {
-              showClipLinkBottomSheet(linkDTO.toastId, linkDTO.toastTitle)
-            },
-          ).show(parentFragmentManager, this.tag)
+          getAllClip { categoryList ->
+            val isFullClipSize = categoryList.size > 2
+            DeleteLinkBottomSheetFragment.newInstance(
+              clipId,
+              isFullClipSize,
+              { requireContext().linkMindSnackBar(binding.vSnack, "클립 하나임", true) },
+              handleDeleteButton = {
+                viewModel.deleteLink(linkDTO.toastId)
+              },
+              handleChangeButton = {
+                navigateToDestination("featureClipChange://clipChangeFragment/$clipId/${linkDTO.toastId}")
+              },
+              handleModifyButton = {
+                showClipLinkBottomSheet(linkDTO.toastId, linkDTO.toastTitle)
+              },
+            ).show(parentFragmentManager, this.tag)
+          }
         }
       }
     }
@@ -264,16 +290,33 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
     val editTitleBottomSheet = LinkMindBottomSheet(requireContext())
     editTitleBottomSheet.show()
     editTitleBottomSheet.apply {
+      setBottomSheetType(BottomSheetType.LINK)
       setBottomSheetHint(itemText)
       setTitle(org.sopt.mainfeature.R.string.clip_link_bottom_sheet_modify_title)
       setBottomSheetText(itemText)
-      setErroMsg(org.sopt.mainfeature.R.string.error_clip_length)
       bottomSheetConfirmBtnClick { // dto 수정됨
         val newTitle = getText()
         viewModel.patchLinkTitle(itemId, newTitle)
         dismiss()
       }
     }
+  }
+
+  private fun getAllClip(callback: (List<Category>) -> Unit) {
+    viewModel.categoryState
+      .flowWithLifecycle(viewLifeCycle)
+      .onEach { state ->
+        when (state) {
+          is UiState.Success -> {
+            callback(state.data)
+          }
+
+          else -> {
+            initViewState(true)
+          }
+        }
+      }
+      .launchIn(viewLifeCycleScope)
   }
 
   private fun naviagateToWebViewFragment(site: String, toastId: Long, isRead: Boolean) {

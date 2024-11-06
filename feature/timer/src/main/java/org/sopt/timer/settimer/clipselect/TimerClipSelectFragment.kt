@@ -10,9 +10,9 @@ import designsystem.components.button.state.LinkMindButtonState
 import designsystem.components.dialog.LinkMindDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.model.timer.Clip
 import org.sopt.timer.R
 import org.sopt.timer.databinding.FragmentTimerClipSelectBinding
-import org.sopt.timer.model.Clip
 import org.sopt.timer.settimer.SetTimerViewModel
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.fragment.viewLifeCycle
@@ -28,8 +28,8 @@ class TimerClipSelectFragment : BindingFragment<FragmentTimerClipSelectBinding>(
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     getCategoryAll()
-    initCloseButtonClickListener()
     collectClipState()
+    initCloseButtonClickListener()
   }
 
   private fun getCategoryAll() {
