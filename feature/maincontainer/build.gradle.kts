@@ -16,5 +16,6 @@ dependencies {
   implementation(projects.feature.clip)
   implementation(projects.feature.mypage)
   implementation(projects.feature.timer)
+  implementation(projects.feature.search)
   implementation(projects.feature.savelink)
 }

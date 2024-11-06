@@ -19,15 +19,14 @@
     android:title="" />
 
   <item
+    android:id="@+id/navigation_search"
+    android:icon="@drawable/sel_bnv_search"
+    android:title="SEARCH"
+    app:iconPadding="4dp" />
+
+  <item
     android:id="@+id/navigation_timer"
     android:icon="@drawable/sel_bnv_timer"
     android:title="@string/text_timer"
     app:iconPadding="4dp" />
-
-  <item
-    android:id="@+id/navigation_my"
-    android:icon="@drawable/sel_bnv_my"
-    android:title="@string/text_my"
-    app:iconPadding="4dp" />
-
 </menu>

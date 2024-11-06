@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
           popBackStack(org.sopt.clip.R.id.nav_graph_clip, false)
           popBackStack(org.sopt.timer.R.id.nav_graph_timer, false)
           popBackStack(org.sopt.mypage.R.id.nav_graph_mypage, false)
+          popBackStack(org.sopt.search.R.id.nav_graph_search, false)
           if (it.itemId == R.id.navigation_home) {
             popBackStack(org.sopt.home.R.id.nav_graph_home, true)
           }
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
   private fun setBottomVisible() {
     navController.addOnDestinationChangedListener { _, destination, _ ->
       if (destination.id == R.id.navigation_home || destination.id == R.id.navigation_clip ||
-        destination.id == R.id.navigation_timer || destination.id == R.id.navigation_my
+        destination.id == R.id.navigation_timer || destination.id == R.id.navigation_search
       ) {
         viewModel.updateBnvVisible(true)
       } else {
@@ -134,9 +135,15 @@ class MainActivity : AppCompatActivity() {
   private val navigationMap = mapOf(
     R.id.navigation_home to org.sopt.home.R.id.nav_graph_home,
     R.id.navigation_clip to org.sopt.clip.R.id.nav_graph_clip,
-    R.id.navigation_my to org.sopt.mypage.R.id.nav_graph_mypage,
+    R.id.navigation_search to org.sopt.search.R.id.nav_graph_search,
     R.id.navigation_timer to org.sopt.timer.R.id.nav_graph_timer,
   )
+  /*private val navigationMap = mapOf(
+    R.id.navigation_home to org.sopt.home.R.id.nav_graph_home,
+    R.id.navigation_clip to org.sopt.clip.R.id.nav_graph_clip,
+    R.id.navigation_my to org.sopt.mypage.R.id.nav_graph_mypage,
+    R.id.navigation_timer to org.sopt.timer.R.id.nav_graph_timer,
+  )*/
 
   override fun onWindowFocusChanged(hasFocus: Boolean) {
     super.onWindowFocusChanged(hasFocus)
