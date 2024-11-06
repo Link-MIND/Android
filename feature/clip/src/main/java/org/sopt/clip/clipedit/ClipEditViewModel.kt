@@ -32,15 +32,15 @@ class ClipEditViewModel @Inject constructor(
   private val _editTitleState = MutableStateFlow<UiState<Unit>>(UiState.Empty)
   val editTitleState: StateFlow<UiState<Unit>> = _editTitleState.asStateFlow()
 
-  private val _last2 = MutableStateFlow<UiState<Int>>(UiState.Empty)
-  val last2: StateFlow<UiState<Int>> = _last2.asStateFlow()
-
-  fun update2(a: Int) = viewModelScope.launch {
-    _last2.emit(UiState.Success(a))
-  }
+  private val _categoryEditPriorityState = MutableStateFlow<UiState<Pair<Long, Int>>>(UiState.Empty)
+  val categoryEditPriorityState: StateFlow<UiState<Pair<Long, Int>>> = _categoryEditPriorityState.asStateFlow()
 
   init {
     getCategoryAll()
+  }
+
+  fun updateCategoryEditPriorityState(clipId: Long, newIndex: Int) = viewModelScope.launch {
+    _categoryEditPriorityState.emit(UiState.Success(Pair(clipId, newIndex)))
   }
 
   fun getCategoryAll() = viewModelScope.launch {

@@ -15,6 +15,8 @@ import org.sopt.home.adapter.HomeWeekLinkAdapter
 import org.sopt.home.adapter.HomeWeekRecommendLinkAdapter
 import org.sopt.home.adapter.ItemDecoration
 import org.sopt.home.databinding.FragmentHomeBinding
+import org.sopt.home.model.UpdatePriority
+import org.sopt.model.home.PopupInfo
 import org.sopt.ui.base.BindingFragment
 import org.sopt.ui.nav.DeepLinkUtil
 import org.sopt.ui.view.onThrottleClick
@@ -28,12 +30,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private lateinit var homeWeekLinkAdapter: HomeWeekLinkAdapter
   private lateinit var homeWeekRecommendLinkAdapter: HomeWeekRecommendLinkAdapter
   private val viewModel by viewModels<HomeViewModel>()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     initView()
     collectState()
     navigateToSetting()
     navigateToSearch()
+    navigateToAllClip()
   }
 
   private fun initView() {
@@ -51,7 +55,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     binding.tvHomeUserClipName.text = homeState.nickName
     binding.tvHomeToastLinkCount.text = "${homeState.readToastNum}개의 링크"
     binding.pbLinkmindHome.setProgressBarMain(homeState.calculateProgress())
-    homeClipAdapter.submitList(homeState.categoryList)
+    homeClipAdapter.submitList(homeState.recentSavedLink)
     homeWeekLinkAdapter.submitList(homeState.weekBestLink)
     homeWeekRecommendLinkAdapter.submitList(homeState.recommendLink)
   }
@@ -63,13 +67,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateClipLink -> navigateToDestination(
         "featureSaveLink://ClipLinkFragment/${viewModel.container.stateFlow.value.categoryId}/${viewModel.container.stateFlow.value.categoryName}",
       )
-      is HomeSideEffect.ShowBottomSheet -> showHomeBottomSheet()
+      is HomeSideEffect.NavigateSaveLink -> navigateToDestinationWithoutAnim("featureSaveLink://saveLinkFragment?clipboardLink=")
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
         navigateToDestination(
           "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
         )
       }
+      is HomeSideEffect.NavigateAllClip -> navigateToDestinationWithoutAnim("featureSaveLink://ClipLinkFragment/0/전체 클립")
+      is HomeSideEffect.ShowPopupInfo -> showPopupInfo(viewModel.container.stateFlow.value.popupList)
+      is HomeSideEffect.ShowUpdateDialog -> showUpdateDialog(viewModel.container.stateFlow.value.marketUpdate)
     }
   }
 
@@ -80,9 +87,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     viewModel.apply {
       getMainPageUserClip()
       getRecommendSite()
+      getRecentSavedClip()
       getWeekBestLink()
+      getPopupListInfo()
+      checkMarketUpdateState()
     }
   }
+
   private fun navigateToSetting() {
     binding.ivHomeSetting.onThrottleClick {
       viewModel.navigateSetting()
@@ -95,18 +106,22 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     }
   }
 
+  private fun navigateToAllClip() {
+    binding.ivRecentClip.onThrottleClick {
+      viewModel.navigateAllClip()
+    }
+  }
+
   private fun setClipAdapter() {
     homeClipAdapter = HomeClipAdapter(
       onClickClip = {
-        viewModel.navigateClipLink(it.categoryId, it.categoryTitle)
+        viewModel.navigateWebview(it.linkUrl)
       },
       onClickEmptyClip = {
-        viewModel.showBottomSheet()
+        viewModel.navigateSaveLink()
       },
     )
     binding.rvHomeClip.adapter = homeClipAdapter
-    val spacingClipInPixels = resources.getDimensionPixelSize(R.dimen.spacing_11)
-    binding.rvHomeClip.addItemDecoration(ItemDecoration(2, spacingClipInPixels))
   }
 
   private fun setWeekLinkAdapter() {
@@ -140,20 +155,35 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     findNavController().navigate(request, navOptions)
   }
 
-  private fun showHomeBottomSheet() {
-    val linkMindBottomSheet = LinkMindBottomSheet(requireContext())
-    linkMindBottomSheet.show()
-    linkMindBottomSheet.apply {
-      setBottomSheetType(BottomSheetType.CLIP)
-      setBottomSheetHint(org.sopt.mainfeature.R.string.home_new_clip_info)
-      setTitle(org.sopt.mainfeature.R.string.home_add_clip)
-      setErroMsg(org.sopt.mainfeature.R.string.home_error_clip_info)
-      bottomSheetConfirmBtnClick {
-        if (showErrorMsg(BottomSheetType.CLIP)) return@bottomSheetConfirmBtnClick
-        viewModel.saveCategoryTitle(it)
-        dismiss()
-        requireContext().linkMindSnackBar(binding.vSnack, "클립 생성 완료!", false)
+  private fun navigateToDestinationWithoutAnim(destination: String) {
+    val (request, navOptions) = DeepLinkUtil.getNavRequestNotPopUpAndOption(
+      destination.delSpace(),
+    )
+    findNavController().navigate(request, navOptions)
+  }
+
+  private fun showPopupInfo(popupList: List<PopupInfo>) {
+    popupList.forEach {
+      if (viewModel.checkPopupDate(it.popupActiveStartDate, it.popupActiveEndDate)
+      ) {
+        val surveyDialog = SurveyDialogFragment.newInstance(
+          it.popupImage,
+          { viewModel.navigateWebview(it.popupLinkUrl) },
+          { viewModel.patchPopupInvisible(it.popupId.toLong(), 7) },
+          { viewModel.setPopupVisible() },
+        )
+        surveyDialog.show(parentFragmentManager, this.tag)
       }
+    }
+  }
+
+  private fun showUpdateDialog(marketUpdate: UpdatePriority) {
+    if (marketUpdate != UpdatePriority.EMPTY) {
+      val marketUpdateDialog = MarketUpdateDialogFragment.newInstance(
+        marketUpdate,
+        { viewModel.setMarketUpdateVisible() },
+      )
+      marketUpdateDialog.show(parentFragmentManager, this.tag)
     }
   }
 }

@@ -38,13 +38,28 @@ interface SecurityDataStore {
   @SetValue(KEY_FCM_ALLOWED)
   suspend fun setFcmAllowed(boolean: Boolean)
 
+  @GetValue(KEY_POPUP_VISIBILITY)
+  fun flowPopupVisibility(): Flow<Boolean>
+
+  @SetValue(KEY_POPUP_VISIBILITY)
+  suspend fun setPopupVisibility(boolean: Boolean)
+
+  @GetValue(KEY_MARKET_UPDATE)
+  fun flowMarketUpdate(): Flow<Boolean>
+
+  @SetValue(KEY_MARKET_UPDATE)
+  suspend fun setMarketUpdate(boolean: Boolean)
+
   @ClearValues
   suspend fun clearAll()
+
   companion object {
     const val KEY_ACCESSTOKEN = "key-accesstoken"
     const val KEY_REFRESHTOKEN = "key-refreshtoken"
     const val KEY_DEVICETOKEN = "key-devicetoken"
     const val KEY_AUTOLOGIN = "key-autologin"
     const val KEY_FCM_ALLOWED = "key-fcm-allowed"
+    const val KEY_POPUP_VISIBILITY = "key-popup-dialog"
+    const val KEY_MARKET_UPDATE = "key-market-update"
   }
 }

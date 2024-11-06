@@ -1,9 +1,14 @@
 package org.sopt.home
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -13,56 +18,62 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import org.sopt.datastore.datastore.SecurityDataStore
 import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
+import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
+import org.sopt.home.usecase.GetPopupInfo
+import org.sopt.home.usecase.GetRecentSavedLink
 import org.sopt.home.usecase.GetRecommendSite
 import org.sopt.home.usecase.GetWeekBestLink
-import org.sopt.model.category.Category
+import org.sopt.home.usecase.PatchPopupInvisible
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+  @ApplicationContext private val context: Context,
   private val getMainPageUserClip: GetMainPageUserClip,
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
+  private val getRecentSavedLink: GetRecentSavedLink,
   private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
+  private val patchPopupInvisible: PatchPopupInvisible,
+  private val getPopupInfo: GetPopupInfo,
+  private val dataStore: SecurityDataStore,
 ) : ContainerHost<HomeState, HomeSideEffect>, ViewModel() {
   override val container: Container<HomeState, HomeSideEffect> =
     container(HomeState())
 
-  fun saveCategoryTitle(categoryTitle: String) = viewModelScope.launch {
-    postAddCategoryTitle(
-      PostAddCategoryTitleUseCase.Param(
-        categoryTitle = categoryTitle,
-      ),
-    ).onSuccess {
-      getMainPageUserClip()
-    }.onFailure { Log.d("saveCategoryTitleFail", "$it") }
-  }
-
   fun getMainPageUserClip() = intent {
     getMainPageUserClip.invoke().onSuccess {
       reduce {
-        val tempCategoryList = listOf(
-          Category(
-            0,
-            "전체 카테고리",
-            it.allToastNum.toLong(),
-          ),
-        ) + it.mainCategoryDto
-        val categoryList = if (tempCategoryList.size < 4) tempCategoryList + null else tempCategoryList
-        val finalCategoryList = categoryList.distinctBy { it?.categoryId }
         state.copy(
           nickName = it.nickName,
           allToastNum = it.allToastNum,
           readToastNum = it.readToastNum,
-          categoryList = (
-            finalCategoryList
-            ),
         )
       }
     }.onFailure {
       Log.d("MainUser", "$it")
+    }
+  }
+
+  fun getRecentSavedClip() = intent {
+    getRecentSavedLink.invoke().onSuccess {
+      if (it.isEmpty()) {
+        reduce {
+          state.copy(recentSavedLink = listOf(null))
+        }
+      } else {
+        reduce {
+          state.copy(recentSavedLink = (container.stateFlow.value.recentSavedLink + it).distinctBy { it?.toastId })
+        }
+      }
+    }.onFailure {
+      Log.d("RecentSaved", "$it")
     }
   }
 
@@ -86,24 +97,81 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun getPopupListInfo() = intent {
+    if (dataStore.flowPopupVisibility().first()) {
+      getPopupInfo.invoke().onSuccess {
+        postSideEffect(HomeSideEffect.ShowPopupInfo)
+        reduce {
+          state.copy(popupList = it)
+        }
+      }.onFailure {
+        Log.d("getPopupListInfo", "$it")
+      }
+    }
+  }
+
+  fun patchPopupInvisible(popupId: Long, hideDate: Long) {
+    viewModelScope.launch {
+      patchPopupInvisible.invoke(popupId, hideDate)
+        .onSuccess {
+          Log.d("patchPopupInvisible", "$it")
+        }
+        .onFailure {
+          Log.d("patchPopupInvisible", "$it")
+        }
+    }
+  }
+
+  fun checkMarketUpdateState() {
+    viewModelScope.launch {
+      if (dataStore.flowMarketUpdate().first()) {
+        val appUpdateManager = AppUpdateManagerFactory.create(context)
+        val appUpdateTask = appUpdateManager.appUpdateInfo
+
+        appUpdateTask.addOnSuccessListener { appUpdateInfo ->
+          if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+            intent {
+              postSideEffect(HomeSideEffect.ShowUpdateDialog)
+              reduce {
+                state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+              }
+            }
+          }
+        }.addOnFailureListener { appUpdateInfo ->
+          Log.d("appUpdateInfo", appUpdateInfo.message.toString())
+        }
+      }
+    }
+  }
+
   fun navigateSearch() = intent { postSideEffect(HomeSideEffect.NavigateSearch) }
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
-  fun showBottomSheet() = intent { postSideEffect(HomeSideEffect.ShowBottomSheet) }
-
-  @OptIn(OrbitExperimental::class)
-  fun navigateClipLink(categoryId: Long?, categoryName: String?) = blockingIntent {
-    reduce {
-      state.copy(
-        categoryId = categoryId,
-        categoryName = categoryName,
-      )
-    }
-    postSideEffect(HomeSideEffect.NavigateClipLink)
-  }
+  fun navigateSaveLink() = intent { postSideEffect(HomeSideEffect.NavigateSaveLink) }
+  fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
   fun navigateWebview(url: String) = blockingIntent {
     reduce { state.copy(url = url) }
     postSideEffect(HomeSideEffect.NavigateWebView)
+  }
+
+  fun setPopupVisible() {
+    viewModelScope.launch {
+      dataStore.setPopupVisibility(false)
+    }
+  }
+
+  fun setMarketUpdateVisible() {
+    viewModelScope.launch {
+      dataStore.setMarketUpdate(false)
+    }
+  }
+
+  fun checkPopupDate(activeStartDate: String, activeEndDate: String): Boolean {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val today = Calendar.getInstance().time
+    val startDate = dateFormat.parse(activeStartDate)
+    val endDate = dateFormat.parse(activeEndDate)
+    return today.after(startDate) && today.before(endDate) || today == startDate || today == endDate
   }
 }
