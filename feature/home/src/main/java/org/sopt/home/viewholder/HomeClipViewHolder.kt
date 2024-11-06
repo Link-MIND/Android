@@ -1,5 +1,6 @@
 package org.sopt.home.viewholder
 
+import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -27,21 +28,17 @@ class HomeClipViewHolder(
     with(binding) {
       tvLinkTitle.text = data.toastTitle
       tvLinkUrl.text = data.linkUrl
-      if (data.categoryTitle.isNullOrEmpty()) {
-        tvLinkClipTitle.isGone = true
-      } else {
-        tvLinkClipTitle.isVisible = true
-        tvLinkClipTitle.text = data.categoryTitle
-      }
+      binding.tvLinkTitle.setVisible(!data.categoryTitle.isNullOrEmpty())
+      tvLinkClipTitle.text = data.categoryTitle
       ivLinkThumnail.load(data.thumbnailUrl)
-      if (data.isRead) {
-        tvItemClipLink.isVisible = true
-      } else {
-        tvItemClipLink.isGone = true
-      }
+      tvItemClipLink.setVisible(data.isRead)
       root.onThrottleClick {
         onClickClip.invoke(data)
       }
     }
+  }
+
+  private fun View.setVisible(value: Boolean) {
+    visibility = if (value) View.VISIBLE else View.GONE
   }
 }
