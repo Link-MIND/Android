@@ -98,6 +98,10 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     val WebViewAddress = binding.tvWebviewAddress
 
     url?.let {
+      webView.settings.apply {
+        userAgentString = webView.settings.userAgentString.replace("wv", "")
+        domStorageEnabled = true
+      }
       webView.webViewClient = WebViewClient()
       webView.loadUrl(it)
       WebViewAddress.setText(it)
