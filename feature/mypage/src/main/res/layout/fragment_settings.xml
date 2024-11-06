@@ -53,13 +53,172 @@
       app:layout_constraintTop_toTopOf="parent" />
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cl_mypage_now_link"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/cl_settings_title">
+
+    <ImageView
+      android:id="@+id/iv_profile"
+      android:layout_width="48dp"
+      android:layout_height="48dp"
+      android:layout_marginTop="1dp"
+      android:scaleType="centerCrop"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:src="@drawable/img_mypage_profile" />
+
+    <TextView
+      android:id="@+id/tv_user_name"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginBottom="2dp"
+      android:textAppearance="@style/Typography.suit.bold_18"
+      android:textColor="@color/neutrals900"
+      app:layout_constraintBottom_toTopOf="@id/tv_now_link"
+      app:layout_constraintStart_toEndOf="@id/iv_profile"
+      tools:text="@string/mypage_name_ex" />
+
+    <TextView
+      android:id="@+id/tv_user_name_nim"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="2dp"
+      android:text="@string/mypage_nim"
+      android:textAppearance="@style/Typography.suit.regular_18"
+      android:textColor="@color/neutrals900"
+      app:layout_constraintBaseline_toBaselineOf="@id/tv_user_name"
+      app:layout_constraintStart_toEndOf="@id/tv_user_name"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/tv_now_link"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="12dp"
+      android:layout_marginTop="26dp"
+      android:text="@string/mypage_link_number_now"
+      android:textAppearance="@style/Typography.suit.regular_18"
+      android:textColor="@color/neutrals900"
+      app:layout_constraintStart_toEndOf="@id/iv_profile"
+      app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+      android:id="@+id/tv_my_total_link_num"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="3dp"
+      android:text="@string/search_clip_amount_n"
+      android:textAppearance="@style/Typography.suit.bold_28"
+      android:textColor="@color/primary"
+      app:layout_constraintBaseline_toBaselineOf="@id/tv_my_total_link"
+      app:layout_constraintEnd_toStartOf="@id/tv_my_total_link" />
+
+    <TextView
+      android:id="@+id/tv_my_total_link"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/mypage_number"
+      android:textAppearance="@style/Typography.suit.regular_18"
+      android:textColor="@color/neutrals900"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent" />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+  <View
+    android:id="@+id/bg_link_record"
+    android:layout_width="0dp"
+    android:layout_height="83dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="18dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/shape_neutrals050_line_12_rect"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cl_mypage_now_link" />
+
+  <TextView
+    android:id="@+id/tv_read_link_this_week"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="14dp"
+    android:layout_marginTop="14dp"
+    android:text="@string/mypage_this_week_read_link"
+    android:textAppearance="@style/Typography.suit.regular_14"
+    android:textColor="@color/neutrals400"
+    app:layout_constraintStart_toStartOf="@+id/bg_link_record"
+    app:layout_constraintTop_toTopOf="@+id/bg_link_record" />
+
+  <TextView
+    android:id="@+id/tv_read_link_this_week_num"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="14dp"
+    android:layout_marginBottom="14dp"
+    tools:text="@string/mypage_nn"
+    android:textAppearance="@style/Typography.suit.bold_24"
+    android:textColor="@color/neutrals900"
+    app:layout_constraintBottom_toBottomOf="@id/bg_link_record"
+    app:layout_constraintEnd_toStartOf="@id/v_mypage_line" />
+
+  <TextView
+    android:id="@+id/tv_save_link_this_week"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="14dp"
+    android:layout_marginTop="14dp"
+    android:text="@string/mypage_this_week_save_link"
+    android:textAppearance="@style/Typography.suit.regular_14"
+    android:textColor="@color/neutrals400"
+    app:layout_constraintStart_toEndOf="@+id/v_mypage_line"
+    app:layout_constraintTop_toTopOf="@+id/bg_link_record" />
+
+  <TextView
+    android:id="@+id/tv_save_link_this_week_num"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="14dp"
+    android:layout_marginBottom="14dp"
+    tools:text="@string/mypage_nn"
+    android:textAppearance="@style/Typography.suit.bold_24"
+    android:textColor="@color/neutrals900"
+    app:layout_constraintBottom_toBottomOf="@id/bg_link_record"
+    app:layout_constraintEnd_toEndOf="@id/bg_link_record" />
+
+  <View
+    android:id="@+id/v_mypage_line"
+    android:layout_width="1dp"
+    android:layout_height="0dp"
+    android:background="@color/neutrals100"
+    app:layout_constraintBottom_toBottomOf="@+id/bg_link_record"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/bg_link_record" />
+
+  <View
+    android:id="@+id/v_settings_0"
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:layout_marginTop="24dp"
+    android:background="@color/neutrals050"
+    app:layout_constraintTop_toBottomOf="@id/v_mypage_line" />
+
   <FrameLayout
     android:id="@+id/fl_settings_alert_off"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/cl_settings_title">
+    app:layout_constraintTop_toBottomOf="@id/v_settings_0">
 
     <TextView
       android:id="@+id/tv_settings_alert_off"
@@ -67,7 +226,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="center"
       android:layout_marginHorizontal="20dp"
-      android:layout_marginVertical="12dp"
+      android:layout_marginVertical="6dp"
       android:background="@drawable/shape_neutrals050_fill_12_rect"
       android:gravity="center"
       android:padding="12dp"
@@ -76,54 +235,11 @@
       android:textColor="@color/neutrals400" />
   </FrameLayout>
 
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_user_info"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/fl_settings_alert_off">
-
-    <TextView
-      android:id="@+id/tv_user_name"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="20dp"
-      android:layout_marginTop="22dp"
-      android:textAppearance="@style/Typography.suit.bold_18"
-      android:textColor="@color/neutrals900"
-      app:layout_constraintBaseline_toBaselineOf="@id/tv_user_name_nim"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      tools:text="홍길동" />
-
-    <TextView
-      android:id="@+id/tv_user_name_nim"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="22dp"
-      android:layout_marginBottom="22dp"
-      android:text="@string/user_nim"
-      android:textAppearance="@style/Typography.suit.regular_18"
-      android:textColor="@color/neutrals900"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toEndOf="@id/tv_user_name"
-      app:layout_constraintTop_toTopOf="parent" />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
-
-  <View
-    android:id="@+id/v_settings_1"
-    android:layout_width="match_parent"
-    android:layout_height="4dp"
-    android:background="@color/neutrals050"
-    app:layout_constraintTop_toBottomOf="@id/cl_user_info" />
-
   <androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/cl_settings_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@id/v_settings_1">
+    app:layout_constraintTop_toBottomOf="@id/fl_settings_alert_off">
 
     <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/cl_setting_1"
