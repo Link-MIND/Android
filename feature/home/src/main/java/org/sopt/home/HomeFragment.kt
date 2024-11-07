@@ -2,6 +2,7 @@ package org.sopt.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
 
   private fun initView() {
     initAdapter()
+    viewModel.showThenHide()
   }
 
   private fun collectState() {
@@ -50,6 +52,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     binding.tvHomeUserName.text = homeState.nickName
     binding.tvHomeUserClipName.text = homeState.nickName
     binding.tvHomeToastLinkCount.text = "${homeState.readToastNum}개의 링크"
+    binding.testCoach.isVisible = homeState.visibleBubbleMark
     binding.pbLinkmindHome.setProgressBarMain(homeState.calculateProgress())
     homeClipAdapter.submitList(homeState.recentSavedLink)
     homeWeekLinkAdapter.submitList(homeState.weekBestLink)

@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
     setFcv()
     changeBottomNavigationFragment()
     setBottomVisible()
+    viewModel.showThenHide()
   }
 
   private fun collectState() {
@@ -55,6 +56,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun render(mainState: MainState) {
     binding.bnvMain.isVisible = mainState.isBottomNavigationBarVisible
+    binding.testCoach.isVisible = mainState.visibleBubbleMark
   }
 
   private fun handleSideEffect(sideEffect: MainSideEffect) {

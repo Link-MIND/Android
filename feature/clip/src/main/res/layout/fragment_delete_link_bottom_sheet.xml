@@ -58,7 +58,7 @@
 
         <TextView
             android:id="@+id/tv_delete_link_change"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="20dp"
             android:paddingTop="17dp"
@@ -66,10 +66,19 @@
             android:text="클립 이동"
             android:textAppearance="@style/Typography.suit.medium_16"
             android:textColor="@color/neutrals900"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_delete_link_modify" />
-
+        <ImageView
+            android:id="@+id/test_coach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintStart_toEndOf="@id/tv_delete_link_change"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/tooltip_move_clip"
+            app:layout_constraintTop_toTopOf="@id/tv_delete_link_change"
+            app:layout_constraintBottom_toBottomOf="@id/tv_delete_link_change"
+            android:layout_marginBottom="5dp" />
         <TextView
             android:id="@+id/tv_delete_link_delete"
             android:layout_width="0dp"

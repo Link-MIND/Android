@@ -18,4 +18,5 @@ dependencies {
   implementation(projects.feature.timer)
   implementation(projects.feature.search)
   implementation(projects.feature.savelink)
+  implementation(projects.core.datastore)
 }

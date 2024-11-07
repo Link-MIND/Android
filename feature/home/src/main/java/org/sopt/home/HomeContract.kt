@@ -20,6 +20,7 @@ data class HomeState(
   val categoryName: String? = "전체 클립",
   val popupList: List<PopupInfo> = emptyList(),
   val marketUpdate: UpdatePriority = UpdatePriority.EMPTY,
+  val visibleBubbleMark: Boolean = false,
 ) {
   fun calculateProgress(): Int {
     if (readToastNum > allToastNum) return 0

@@ -8,6 +8,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
@@ -77,6 +78,21 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
+    Log.d("Update", "${dataStore.flowMarketUpdate().first()}")
+    if (dataStore.flowMarketUpdate().first()) {
+      delay(showDelay)
+      reduce {
+        state.copy(visibleBubbleMark = true)
+      }
+      delay(duration)
+      reduce {
+        state.copy(visibleBubbleMark = false)
+      }
+      dataStore.setMarketUpdate(false)
+    }
+  }
+
   fun getRecommendSite() = intent {
     getRecommendSite.invoke().onSuccess {
       reduce {
@@ -133,7 +149,11 @@ class HomeViewModel @Inject constructor(
             intent {
               postSideEffect(HomeSideEffect.ShowUpdateDialog)
               reduce {
-                state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+                state.copy(
+                  marketUpdate = UpdatePriority.toUpdatePriority(
+                    appUpdateInfo.updatePriority(),
+                  ),
+                )
               }
             }
           }
