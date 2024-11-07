@@ -4,11 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.clip.SelectedToggle
+import org.sopt.datastore.datastore.SecurityDataStore
 import org.sopt.domain.category.category.usecase.GetCategoryAllUseCase
 import org.sopt.domain.category.category.usecase.GetCategoryLinkUseCase
 import org.sopt.domain.link.usecase.DeleteLinkUseCase
@@ -26,6 +30,7 @@ class ClipLinkViewModel @Inject constructor(
   private val patchLinkTitleUseCase: PatchLinkTitleUseCase,
   private val getCategoryAll: GetCategoryAllUseCase,
   private val patchLinkCategoryUseCase: PatchLinkCategoryUseCase,
+  private val dataStore: SecurityDataStore,
 ) : ViewModel() {
   private val _linkState = MutableStateFlow<UiState<List<CategoryLink>>>(UiState.Empty)
   val linkState: StateFlow<UiState<List<CategoryLink>>> = _linkState.asStateFlow()
@@ -49,6 +54,32 @@ class ClipLinkViewModel @Inject constructor(
   val patchLinkCategory: StateFlow<UiState<Long>> = _patchLinkCategory.asStateFlow()
 
   var toggleSelectedPast: SelectedToggle = SelectedToggle.ALL
+  init {
+    showThenHide()
+  }
+  val tooltip = MutableStateFlow(false)
+  fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = viewModelScope.launch(Dispatchers.IO) {
+    runCatching {
+      val booleanListFlow =
+        dataStore.flowTooltip().first().toString()
+      val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
+      if (stringValue[3]) {
+        delay(showDelay)
+        tooltip.emit(stringValue[3])
+        delay(duration)
+        tooltip.emit(false)
+        dataStore.setTooltip(
+          listOf(
+            stringValue[0],
+            stringValue[1],
+            stringValue[2],
+            !stringValue[3],
+          ).joinToString(","),
+        )
+      }
+    }
+  }
+
   fun deleteLink(toastId: Long) = viewModelScope.launch {
     deleteLinkUseCase.invoke(param = DeleteLinkUseCase.Param(toastId = toastId)).onSuccess {
       if (it == 200) {

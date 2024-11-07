@@ -33,6 +33,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     super.onViewCreated(view, savedInstanceState)
     initView()
     collectState()
+    collectState()
     navigateToSetting()
     navigateToAllClip()
   }
@@ -70,7 +71,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
         navigateToDestination(
-          "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
+          "featureSaveLink://webViewFragment/${viewModel.container.stateFlow.value.toastId}/${viewModel.container.stateFlow.value.isRead}/${true}/$encodedURL",
         )
       }
 
@@ -109,7 +110,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private fun setClipAdapter() {
     homeClipAdapter = HomeClipAdapter(
       onClickClip = {
-        viewModel.navigateWebview(it.linkUrl)
+        viewModel.navigateWebview(it.linkUrl, it.isRead, it.toastId)
       },
       onClickEmptyClip = {
         viewModel.navigateSaveLink()

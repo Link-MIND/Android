@@ -4,11 +4,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.fragment.findNavController
@@ -36,6 +38,7 @@ class WebViewFragment :
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.showThenHide()
     val decodedURL = URLDecoder.decode(args.site, StandardCharsets.UTF_8.toString())
     binding.wbClip.settings.javaScriptEnabled = true
     if (args.isMylink) {
@@ -60,16 +63,23 @@ class WebViewFragment :
     viewModel.patchReadLinkResult.flowWithLifecycle(viewLifeCycle).onEach {
       when (it) {
         true -> {
-          binding.ivReadAfter.setImageResource(org.sopt.mainfeature.R.drawable.ic_read_after_24)
+          binding.ivReadAfter.setImageResource(org.sopt.mainfeature.R.drawable.ic_read_check)
           if (isPatched) requireActivity().linkMindSnackBar(binding.clBottomBar, "열람 완료")
         }
 
         false -> {
-          binding.ivReadAfter.setImageResource(R.drawable.ic_read_before_24)
+          binding.ivReadAfter.setImageResource(org.sopt.mainfeature.R.drawable.ic_read)
           if (isPatched) requireActivity().linkMindSnackBar(binding.clBottomBar, "열람 취소")
         }
       }
     }.launchIn(viewLifeCycleScope)
+
+    viewModel.tooltip.flowWithLifecycle(viewLifeCycle).onEach {
+      Log.d("tooltipVisible", "$it")
+      binding.testCoach.isVisible = it
+      binding.testCoach2.isVisible = it
+    }.launchIn(viewLifeCycleScope)
+
     setupWebView(decodedURL)
     onClickShare(decodedURL)
     onClickClipLink()

@@ -1,6 +1,5 @@
 package org.sopt.maincontainer
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -22,19 +21,22 @@ class MainViewModel @Inject constructor(
     container(MainState())
 
   fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
-    Log.d("Update", "${dataStore.flowMarketUpdate().first()}")
-    if (dataStore.flowMarketUpdate().first()) {
-      delay(showDelay)
-      reduce {
-        state.copy(visibleBubbleMark = true)
-      }
-      delay(duration)
-      reduce {
-        state.copy(visibleBubbleMark = false)
+    runCatching {
+      val booleanListFlow =
+        dataStore.flowTooltip().first().toString()
+      val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
+      if (stringValue[0]) {
+        delay(showDelay)
+        reduce {
+          state.copy(visibleBubbleMark = true)
+        }
+        delay(duration)
+        reduce {
+          state.copy(visibleBubbleMark = false)
+        }
       }
     }
   }
-
   fun updateClipBoard(clipboard: String) = intent {
     reduce {
       state.copy(clipboard = clipboard)

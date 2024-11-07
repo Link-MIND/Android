@@ -122,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:src="@drawable/ic_read_after_24"
+        android:src="@drawable/ic_read"
         app:layout_constraintEnd_toStartOf="@+id/iv_share"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/iv_next"

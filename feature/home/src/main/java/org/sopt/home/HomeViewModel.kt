@@ -79,17 +79,28 @@ class HomeViewModel @Inject constructor(
   }
 
   fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
-    Log.d("Update", "${dataStore.flowMarketUpdate().first()}")
-    if (dataStore.flowMarketUpdate().first()) {
-      delay(showDelay)
-      reduce {
-        state.copy(visibleBubbleMark = true)
+    runCatching {
+      val booleanListFlow =
+        dataStore.flowTooltip().first().toString()
+      val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
+      if (stringValue[1]) {
+        delay(showDelay)
+        reduce {
+          state.copy(visibleBubbleMark = true)
+        }
+        delay(duration)
+        reduce {
+          state.copy(visibleBubbleMark = false)
+        }
+        dataStore.setTooltip(
+          listOf(
+            !stringValue[0],
+            !stringValue[1],
+            stringValue[2],
+            stringValue[3],
+          ).joinToString(","),
+        )
       }
-      delay(duration)
-      reduce {
-        state.copy(visibleBubbleMark = false)
-      }
-      dataStore.setMarketUpdate(false)
     }
   }
 
@@ -169,8 +180,9 @@ class HomeViewModel @Inject constructor(
   fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
-  fun navigateWebview(url: String) = blockingIntent {
-    reduce { state.copy(url = url) }
+  fun navigateWebview(url: String, isRead: Boolean = false, toastId: Long = 0) = blockingIntent {
+    reduce { state.copy(url = url, toastId = toastId, isRead = isRead) }
+    Log.d("testSak", "$toastId $isRead")
     postSideEffect(HomeSideEffect.NavigateWebView)
   }
 
