@@ -41,6 +41,15 @@ class MainViewModel @Inject constructor(
     reduce {
       state.copy(clipboard = clipboard)
     }
+    dataStore.setRecentLink(clipboard)
+  }
+
+  fun getRecentLink() =intent {
+    if (dataStore.flowRecentLink().first().isNullOrEmpty()) return@intent
+    val clipboard=dataStore.flowRecentLink().first()
+    reduce {
+      state.copy(clipboard = clipboard)
+    }
   }
 
   fun updateBnvVisible(isCheck: Boolean) = intent {
