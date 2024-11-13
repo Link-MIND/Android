@@ -37,7 +37,8 @@ class DeleteLinkBottomSheetFragment() :
       }
     }
     if (clipId?.toInt() == 0) {
-//      binding.tvDeleteLinkChange.isVisible = false
+      binding.tvDeleteLinkChange.isVisible = false
+      binding.testCoach.isVisible=false
     }
 
     binding.ivDeleteLinkBottomSheetClose.setOnClickListener {

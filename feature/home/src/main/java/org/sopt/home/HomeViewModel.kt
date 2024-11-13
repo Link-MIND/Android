@@ -168,11 +168,16 @@ class HomeViewModel @Inject constructor(
               }
             }
           }
+//          setToolTip()
         }.addOnFailureListener { appUpdateInfo ->
           Log.d("appUpdateInfo", appUpdateInfo.message.toString())
         }
       }
     }
+  }
+
+  fun setToolTip() =viewModelScope.launch {
+    dataStore.setTooltip(listOf(true, true, true, true).joinToString(","))
   }
 
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
