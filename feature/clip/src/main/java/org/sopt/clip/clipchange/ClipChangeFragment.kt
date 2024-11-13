@@ -32,6 +32,7 @@ class ClipChangeFragment :
     getCategoryAll()
     collectClipState(args)
     initCloseButtonClickListener()
+    initNextButtonClickListener()
   }
 
   private fun getCategoryAll() {
@@ -76,19 +77,31 @@ class ClipChangeFragment :
       list.onEach { it.isSelected = false }
       list[index].isSelected = true
       binding.btnClipChangeSelectNext.state = LinkMindButtonState.ENABLE
+      viewModel.updateSelectedCategoryState(toastId, newClipId, true)
     } else {
       list.onEach { it.isSelected = false }
       binding.btnClipChangeSelectNext.state = LinkMindButtonState.DISABLE
+      viewModel.updateSelectedCategoryState(toastId, newClipId, false)
     }
-
-    initNextButtonClickListener(toastId, newClipId)
   }
 
-  private fun initNextButtonClickListener(toastId: Long, newClipId: Long) {
+  private fun initNextButtonClickListener() {
     binding.btnClipChangeSelectNext.btnClick {
-      viewModel.patchLinkCategory(toastId = toastId, categoryId = newClipId)
+      collectSelectedCategoryState()
       findNavController().popBackStack()
     }
+  }
+
+  private fun collectSelectedCategoryState() {
+    viewModel.selectedCategory.flowWithLifecycle(viewLifeCycle).onEach { state ->
+      when (state) {
+        is UiState.Success -> {
+          viewModel.patchLinkCategory(toastId = state.data.first, categoryId = state.data.second)
+        }
+
+        else -> {}
+      }
+    }.launchIn(viewLifeCycleScope)
   }
 
   private fun initCloseButtonClickListener() {
@@ -97,6 +110,13 @@ class ClipChangeFragment :
     }
   }
 
-  private fun excludeCurrentClipId(clipList: List<Clip>, currentClipId: Long): List<Clip> =
-    clipList.filter { it.id != currentClipId }
+  private fun excludeCurrentClipId(clipList: List<Clip>, currentClipId: Long): List<Clip> {
+    val updatedList = clipList.drop(1)
+    val currentClip = updatedList.find { it.id == currentClipId }
+    val resultList = updatedList.filter { it.id != currentClipId }.toMutableList()
+    currentClip?.let {
+      resultList.add(0, it)
+    }
+    return resultList
+  }
 }

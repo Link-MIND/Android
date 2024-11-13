@@ -42,6 +42,9 @@ class ClipLinkViewModel @Inject constructor(
   private val _categoryState = MutableStateFlow<UiState<List<Category>>>(UiState.Empty)
   val categoryState: StateFlow<UiState<List<Category>>> = _categoryState.asStateFlow()
 
+  private val _selectedCategory = MutableStateFlow<UiState<Pair<Long, Long>>>(UiState.Empty)
+  val selectedCategory: StateFlow<UiState<Pair<Long, Long>>> = _selectedCategory.asStateFlow()
+
   private val _patchLinkCategory = MutableStateFlow<UiState<Long>>(UiState.Empty)
   val patchLinkCategory: StateFlow<UiState<Long>> = _patchLinkCategory.asStateFlow()
 
@@ -99,6 +102,13 @@ class ClipLinkViewModel @Inject constructor(
     }
   }
 
+  fun updateSelectedCategoryState(toastId: Long, newClipId: Long, isSelected: Boolean) = viewModelScope.launch {
+    when (isSelected) {
+      true -> _selectedCategory.emit(UiState.Success(Pair(toastId, newClipId)))
+      false -> _selectedCategory.emit(UiState.Empty)
+    }
+  }
+  
   fun initState() {
     _linkState.value = UiState.Empty
     _patchLinkCategory.value = UiState.Empty
