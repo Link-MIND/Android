@@ -26,10 +26,14 @@ class HomeClipViewHolder(
       return
     }
     with(binding) {
+      if (data.categoryTitle.isNullOrEmpty()) {
+        tvLinkClipTitle.isGone = true
+      } else {
+        tvLinkClipTitle.isVisible = true
+        tvLinkClipTitle.text = data.categoryTitle
+      }
       tvLinkTitle.text = data.toastTitle
       tvLinkUrl.text = data.linkUrl
-      binding.tvLinkTitle.setVisible(!data.categoryTitle.isNullOrEmpty())
-      tvLinkClipTitle.text = data.categoryTitle
       ivLinkThumnail.load(data.thumbnailUrl)
       tvItemClipLink.setVisible(data.isRead)
       root.onThrottleClick {
