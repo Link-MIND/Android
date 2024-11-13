@@ -108,7 +108,7 @@ class ClipLinkViewModel @Inject constructor(
       false -> _selectedCategory.emit(UiState.Empty)
     }
   }
-  
+
   fun initState() {
     _linkState.value = UiState.Empty
     _patchLinkCategory.value = UiState.Empty
