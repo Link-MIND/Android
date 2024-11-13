@@ -268,7 +268,7 @@ class ClipLinkFragment : BindingFragment<FragmentClipLinkBinding>({ FragmentClip
             DeleteLinkBottomSheetFragment.newInstance(
               clipId,
               isFullClipSize,
-              { requireContext().linkMindSnackBar(binding.vSnack, "클립 하나임", true) },
+              { requireContext().linkMindSnackBar(binding.vSnack, "이동할 클립을 하나 이상 생성해 주세요", true) },
               handleDeleteButton = {
                 viewModel.deleteLink(linkDTO.toastId)
               },
