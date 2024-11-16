@@ -20,6 +20,7 @@ class WebViewViewModel @Inject constructor(
 ) : ViewModel() {
   val patchReadLinkResult = MutableStateFlow(false)
   val tooltip = MutableStateFlow(false)
+  val tooltip2 = MutableStateFlow(false)
   fun patchReadLink(toastId: Long, isRead: Boolean) = viewModelScope.launch {
     patchReadLinkUseCase(param = PatchReadLinkUseCase.Param(toastId, isRead)).onSuccess {
       patchReadLinkResult.emit(it)
@@ -37,6 +38,9 @@ class WebViewViewModel @Inject constructor(
         tooltip.emit(true)
         delay(duration)
         tooltip.emit(false)
+        tooltip2.emit(true)
+        delay(duration)
+        tooltip2.emit(false)
         dataStore.setTooltip(listOf(stringValue[0], stringValue[1], !stringValue[2], stringValue[3]).joinToString(","))
       }
     }

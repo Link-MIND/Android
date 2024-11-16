@@ -50,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="24dp"
+                android:paddingTop="18dp"
                 android:text="@string/home_name_nim"
                 android:textAppearance="@style/Typography.suit.regular_20"
                 android:textColor="@color/neutrals900"

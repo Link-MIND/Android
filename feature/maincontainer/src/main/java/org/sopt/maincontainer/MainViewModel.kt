@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
   override val container: Container<MainState, MainSideEffect> =
     container(MainState())
 
-  fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
+  fun showThenHide(showDelay: Long = 3100, duration: Long = 2000) = intent {
     runCatching {
       val booleanListFlow =
         dataStore.flowTooltip().first().toString()
@@ -34,6 +34,14 @@ class MainViewModel @Inject constructor(
         reduce {
           state.copy(visibleBubbleMark = false)
         }
+        dataStore.setTooltip(
+          listOf(
+            !stringValue[0],
+            stringValue[1],
+            stringValue[2],
+            stringValue[3],
+          ).joinToString(","),
+        )
       }
     }
   }

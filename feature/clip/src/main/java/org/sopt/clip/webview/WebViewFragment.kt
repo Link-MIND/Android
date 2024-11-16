@@ -74,12 +74,14 @@ class WebViewFragment :
       }
     }.launchIn(viewLifeCycleScope)
 
-    viewModel.tooltip.flowWithLifecycle(viewLifeCycle).onEach {
+    viewModel.tooltip2.flowWithLifecycle(viewLifeCycle).onEach {
       Log.d("tooltipVisible", "$it")
       binding.testCoach.isVisible = it
+    }.launchIn(viewLifeCycleScope)
+    viewModel.tooltip.flowWithLifecycle(viewLifeCycle).onEach {
+      Log.d("tooltipVisible2", "$it")
       binding.testCoach2.isVisible = it
     }.launchIn(viewLifeCycleScope)
-
     setupWebView(decodedURL)
     onClickShare(decodedURL)
     onClickClipLink()

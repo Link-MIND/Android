@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
         }
         dataStore.setTooltip(
           listOf(
-            !stringValue[0],
+            stringValue[0],
             !stringValue[1],
             stringValue[2],
             stringValue[3],
