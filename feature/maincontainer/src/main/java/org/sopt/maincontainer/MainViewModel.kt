@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
         dataStore.setTooltip(
           listOf(
             !stringValue[0],
-            stringValue[1],
+            !stringValue[1],
             stringValue[2],
             stringValue[3],
           ).joinToString(","),
