@@ -161,8 +161,8 @@ class MainActivity : AppCompatActivity() {
     if (item.isNullOrEmpty()) return
 
     val pasteData = item.toString()
-    Log.d("recentLink","${viewModel.container.stateFlow.value.clipboard} ${pasteData}")
-    if (pasteData==  viewModel.container.stateFlow.value.clipboard) return
+    Log.d("recentLink", "${viewModel.container.stateFlow.value.clipboard} $pasteData")
+    if (pasteData == viewModel.container.stateFlow.value.clipboard) return
     viewModel.updateClipBoard(pasteData)
 
     hideKeyBoard()

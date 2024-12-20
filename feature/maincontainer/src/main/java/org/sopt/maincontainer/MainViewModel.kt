@@ -52,9 +52,9 @@ class MainViewModel @Inject constructor(
     dataStore.setRecentLink(clipboard)
   }
 
-  fun getRecentLink() =intent {
+  fun getRecentLink() = intent {
     if (dataStore.flowRecentLink().first().isNullOrEmpty()) return@intent
-    val clipboard=dataStore.flowRecentLink().first()
+    val clipboard = dataStore.flowRecentLink().first()
     reduce {
       state.copy(clipboard = clipboard)
     }

@@ -176,7 +176,7 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  fun setToolTip() =viewModelScope.launch {
+  fun setToolTip() = viewModelScope.launch {
     dataStore.setTooltip(listOf(true, true, true, true).joinToString(","))
   }
 
