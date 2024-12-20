@@ -20,7 +20,7 @@
     android:layout_height="wrap_content"
     android:paddingStart="4dp"
     android:paddingTop="16dp"
-    android:text="@string/savelink_text_savelink_en"
+    android:text="@string/savelink_save_link"
     android:textAppearance="@style/Typography.suit.bold_18"
     android:textColor="@color/neutrals900"
     app:layout_constraintStart_toEndOf="@+id/iv_save_link_clip_back"

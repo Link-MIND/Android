@@ -2,6 +2,7 @@ package org.sopt.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,12 +33,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     super.onViewCreated(view, savedInstanceState)
     initView()
     collectState()
+    collectState()
     navigateToSetting()
     navigateToAllClip()
   }
 
   private fun initView() {
     initAdapter()
+    viewModel.showThenHide()
   }
 
   private fun collectState() {
@@ -50,6 +53,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
     binding.tvHomeUserName.text = homeState.nickName
     binding.tvHomeUserClipName.text = homeState.nickName
     binding.tvHomeToastLinkCount.text = "${homeState.readToastNum}개의 링크"
+    binding.testCoach.isVisible = homeState.visibleBubbleMark
     binding.pbLinkmindHome.setProgressBarMain(homeState.calculateProgress())
     homeClipAdapter.submitList(homeState.recentSavedLink)
     homeWeekLinkAdapter.submitList(homeState.weekBestLink)
@@ -67,7 +71,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
       is HomeSideEffect.NavigateWebView -> {
         val encodedURL = URLEncoder.encode(viewModel.container.stateFlow.value.url, StandardCharsets.UTF_8.toString())
         navigateToDestination(
-          "featureSaveLink://webViewFragment/${0}/${false}/${false}/$encodedURL",
+          "featureSaveLink://webViewFragment/${viewModel.container.stateFlow.value.toastId}/${viewModel.container.stateFlow.value.isRead}/${true}/$encodedURL",
         )
       }
 
@@ -106,7 +110,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>({ FragmentHomeBinding.
   private fun setClipAdapter() {
     homeClipAdapter = HomeClipAdapter(
       onClickClip = {
-        viewModel.navigateWebview(it.linkUrl)
+        viewModel.navigateWebview(it.linkUrl, it.isRead, it.toastId)
       },
       onClickEmptyClip = {
         viewModel.navigateSaveLink()

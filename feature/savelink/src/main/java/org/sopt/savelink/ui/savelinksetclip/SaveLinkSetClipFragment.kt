@@ -115,7 +115,10 @@ class SaveLinkSetClipFragment : BindingFragment<FragmentSaveLinkSetClipBinding>(
       btnClick {
         if (state == LinkMindButtonState.DISABLE) return@btnClick
         viewModel.viewModelScope.launch {
-          viewModel.saveLink(viewModel.container.stateFlow.value.url, viewModel.container.stateFlow.value.categoryId)
+          viewModel.saveLink(
+            viewModel.container.stateFlow.value.url,
+            viewModel.container.stateFlow.value.categoryId,
+          ) { showLoadingUsingSaveLink() }
         }
       }
     }

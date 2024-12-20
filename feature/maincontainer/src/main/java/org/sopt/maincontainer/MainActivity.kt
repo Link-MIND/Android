@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
     setFcv()
     changeBottomNavigationFragment()
     setBottomVisible()
+    viewModel.showThenHide()
   }
 
   private fun collectState() {
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun render(mainState: MainState) {
     binding.bnvMain.isVisible = mainState.isBottomNavigationBarVisible
+    binding.testCoach.isVisible = mainState.visibleBubbleMark
   }
 
   private fun handleSideEffect(sideEffect: MainSideEffect) {
@@ -147,9 +150,8 @@ class MainActivity : AppCompatActivity() {
 
   override fun onWindowFocusChanged(hasFocus: Boolean) {
     super.onWindowFocusChanged(hasFocus)
-
     if (!hasFocus) return
-
+    viewModel.getRecentLink()
     val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     if (!clipboard.hasPrimaryClip()) return
 
@@ -159,7 +161,10 @@ class MainActivity : AppCompatActivity() {
     if (item.isNullOrEmpty()) return
 
     val pasteData = item.toString()
+    Log.d("recentLink", "${viewModel.container.stateFlow.value.clipboard} $pasteData")
+    if (pasteData == viewModel.container.stateFlow.value.clipboard) return
     viewModel.updateClipBoard(pasteData)
+
     hideKeyBoard()
 
     val action: () -> Unit = {

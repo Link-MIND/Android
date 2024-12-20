@@ -14,5 +14,6 @@ android {
 dependencies {
   implementation(projects.domain.category)
   implementation(projects.domain.link)
+  implementation(projects.core.datastore)
   implementation(libs.coil)
 }

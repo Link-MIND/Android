@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -31,13 +30,15 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
 @AndroidEntryPoint
-class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebviewBinding.inflate(it) }) {
+class WebViewFragment :
+  BindingFragment<FragmentWebviewBinding>({ FragmentWebviewBinding.inflate(it) }) {
   private val viewModel: WebViewViewModel by viewModels()
   val args: WebViewFragmentArgs by navArgs()
   var isPatched: Boolean = false
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    viewModel.showThenHide()
     val decodedURL = URLDecoder.decode(args.site, StandardCharsets.UTF_8.toString())
     binding.wbClip.settings.javaScriptEnabled = true
     if (args.isMylink) {
@@ -50,13 +51,9 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
           viewModel.patchReadLinkResult.value = false
         }
       }
-    } else {
-      binding.ivRead.isInvisible = true
-      binding.ivRead.isClickable = false
     }
 
-    binding.ivRead.onThrottleClick {
-      Log.e("읽음", "누름")
+    binding.ivReadAfter.onThrottleClick {
       if (args.isMylink) {
         viewModel.patchReadLink(args.toastId, !viewModel.patchReadLinkResult.value)
         isPatched = true
@@ -66,17 +63,27 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     viewModel.patchReadLinkResult.flowWithLifecycle(viewLifeCycle).onEach {
       when (it) {
         true -> {
-          binding.ivRead.setImageResource(org.sopt.mainfeature.R.drawable.ic_read_after_24)
+          binding.ivReadAfter.setImageResource(org.sopt.mainfeature.R.drawable.ic_read_check)
           if (isPatched) requireActivity().linkMindSnackBar(binding.clBottomBar, "열람 완료")
         }
 
         false -> {
-          binding.ivRead.setImageResource(R.drawable.ic_read_before_24)
+          binding.ivReadAfter.setImageResource(org.sopt.mainfeature.R.drawable.ic_read)
           if (isPatched) requireActivity().linkMindSnackBar(binding.clBottomBar, "열람 취소")
         }
       }
     }.launchIn(viewLifeCycleScope)
+
+    viewModel.tooltip2.flowWithLifecycle(viewLifeCycle).onEach {
+      Log.d("tooltipVisible", "$it")
+      binding.testCoach.isVisible = it
+    }.launchIn(viewLifeCycleScope)
+    viewModel.tooltip.flowWithLifecycle(viewLifeCycle).onEach {
+      Log.d("tooltipVisible2", "$it")
+      binding.testCoach2.isVisible = it
+    }.launchIn(viewLifeCycleScope)
     setupWebView(decodedURL)
+    onClickShare(decodedURL)
     onClickClipLink()
     onClickWebViewClose()
     onClickWebViewReStart()
@@ -84,6 +91,18 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     initNavigationBtnClickListener()
     initBrowserBtnClickListener()
     initEditorActionListener()
+  }
+
+  private fun onClickShare(decodedURL: String) {
+    if (decodedURL.isEmpty()) return
+    binding.ivShare.onThrottleClick {
+      val shareIntent = Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, decodedURL)
+      }
+      runCatching { startActivity(Intent.createChooser(shareIntent, "링크 공유하기")) }
+    }
   }
 
   private fun onClickClipLink() {
@@ -98,6 +117,10 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
     val WebViewAddress = binding.tvWebviewAddress
 
     url?.let {
+      webView.settings.apply {
+        userAgentString = webView.settings.userAgentString.replace("wv", "")
+        domStorageEnabled = true
+      }
       webView.webViewClient = WebViewClient()
       webView.loadUrl(it)
       WebViewAddress.setText(it)
@@ -121,23 +144,6 @@ class WebViewFragment : BindingFragment<FragmentWebviewBinding>({ FragmentWebvie
         false
       }
     }
-  }
-
-  private fun initReadBtnClickLister() {
-    with(binding) {
-      ivRead.onThrottleClick {
-        // handleVisibility(ivRead, ivReadAfter)
-      }
-
-      /*ivReadAfter.onThrottleClick {
-        handleVisibility(ivReadAfter, ivRead)
-      }*/
-    }
-  }
-
-  private fun handleVisibility(visibleButton: View, invisibleButton: View) {
-    visibleButton.isVisible = !visibleButton.isVisible
-    invisibleButton.isVisible = !visibleButton.isVisible
   }
 
   private fun onClickWebViewClose() {

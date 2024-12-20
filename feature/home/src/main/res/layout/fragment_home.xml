@@ -1,258 +1,270 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
-
-  <androidx.core.widget.NestedScrollView
-    android:id="@+id/ns_main"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      tools:context="org.sopt.home.HomeFragment">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/ns_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-      <ImageView
-        android:id="@+id/iv_tb_toaster"
-        android:layout_width="108dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="org.sopt.home.HomeFragment">
+
+            <ImageView
+                android:id="@+id/iv_tb_toaster"
+                android:layout_width="108dp"
+                android:layout_height="20dp"
+                android:layout_marginVertical="18dp"
+                android:paddingStart="20dp"
+                android:src="@drawable/img_toaster"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_home_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="16dp"
+                android:src="@drawable/ic_setting_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_home_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="18dp"
+                android:text="@string/home_ex_user_name"
+                android:textAppearance="@style/Typography.suit.bold_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_tb_toaster" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="18dp"
+                android:text="@string/home_name_nim"
+                android:textAppearance="@style/Typography.suit.regular_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toEndOf="@+id/tv_home_user_name"
+                app:layout_constraintTop_toTopOf="@id/tv_home_user_name" />
+
+            <TextView
+                android:id="@+id/tv_toast_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="@string/home_with_toaster"
+                android:textAppearance="@style/Typography.suit.regular_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="@+id/tv_home_user_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
+
+            <TextView
+                android:id="@+id/tv_home_toast_link_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_link_count"
+                android:textAppearance="@style/Typography.suit.extrabold_20"
+                android:textColor="@color/primary"
+                app:layout_constraintStart_toEndOf="@+id/tv_toast_second"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_collect_stamps"
+                android:textAppearance="@style/Typography.suit.regular_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toEndOf="@+id/tv_home_toast_link_count"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
+
+            <TextView
+                android:id="@+id/tv_home_last_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="@string/home_unforget_read"
+                android:textAppearance="@style/Typography.suit.regular_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="@+id/tv_home_user_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_toast_link_count" />
+
+            <TextView
+                android:id="@+id/tv_home_toast_progress_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="8dp"
+                android:text="@string/home_toast_progress_link"
+                android:textAppearance="@style/Typography.suit.extrabold_20"
+                android:textColor="@color/primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_last_comment" />
+
+            <TextView
+                android:id="@+id/tv_all_toast_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_all_toast_ex_num"
+                android:textAppearance="@style/Typography.suit.regular_16"
+                android:textColor="@color/neutrals300"
+                app:layout_constraintBottom_toBottomOf="@id/tv_home_toast_progress_link"
+                app:layout_constraintStart_toEndOf="@+id/tv_home_toast_progress_link" />
+
+            <designsystem.components.horizontalprogressbar.LinkMindHorizontalProgressBar
+                android:id="@+id/pb_linkmind_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="6dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_toast_progress_link" />
+
+            <View
+                android:id="@+id/view_divider_first"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/neutrals050"
+                app:layout_constraintTop_toBottomOf="@id/pb_linkmind_home" />
+
+            <TextView
+                android:id="@+id/tv_home_user_clip_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:paddingStart="20dp"
+                android:text="@string/home_ex_user_name"
+                android:textAppearance="@style/Typography.suit.bold_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_first" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/home_user_clip"
+                android:textAppearance="@style/Typography.suit.regular_20"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toEndOf="@+id/tv_home_user_clip_name"
+                app:layout_constraintTop_toTopOf="@id/tv_home_user_clip_name" />
+
+            <ImageView
+                android:id="@+id/test_coach"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/tool_tip"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_home_user_clip_name"
+                app:layout_constraintEnd_toStartOf="@id/iv_recent_clip"
+                app:layout_constraintTop_toTopOf="@+id/tv_home_user_clip_name" />
+
+            <ImageView
+                android:id="@+id/iv_recent_clip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="26dp"
+                android:paddingBottom="7dp"
+                android:src="@drawable/ic_arrow_black_svg"
+                app:layout_constraintBottom_toBottomOf="@id/tv_home_user_clip_name"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_home_clip"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="14dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_user_clip_name"
+                tools:itemCount="2"
+                tools:listitem="@layout/item_home_clip" />
+
+            <View
+                android:id="@+id/view_divider_second"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/neutrals050"
+                app:layout_constraintTop_toBottomOf="@id/rv_home_clip" />
+
+            <TextView
+                android:id="@+id/tv_home_week_link_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="18dp"
+                android:text="@string/home_this_week_link"
+                android:textAppearance="@style/Typography.suit.medium_18"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_second" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_week_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_week_link_title"
+                tools:listitem="@layout/item_week_link" />
+
+            <View
+                android:id="@+id/view_divider_third"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/neutrals050"
+                app:layout_constraintTop_toBottomOf="@id/rv_week_link" />
+
+            <TextView
+                android:id="@+id/tv_home_week_recommend_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingStart="20dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="18dp"
+                android:text="@string/home_this_week_recommend"
+                android:textAppearance="@style/Typography.suit.medium_18"
+                android:textColor="@color/neutrals900"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider_third" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_home_week_recommend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="80dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_home_week_recommend_title"
+                app:spanCount="3"
+                tools:listitem="@layout/item_week_link" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:id="@+id/v_snack"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginVertical="18dp"
-        android:paddingStart="20dp"
-        android:src="@drawable/img_toaster"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <ImageView
-        android:id="@+id/iv_home_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="16dp"
-        android:src="@drawable/ic_setting_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <TextView
-        android:id="@+id/tv_home_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="18dp"
-        android:text="@string/home_ex_user_name"
-        android:textAppearance="@style/Typography.suit.bold_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_tb_toaster" />
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="24dp"
-        android:text="@string/home_name_nim"
-        android:textAppearance="@style/Typography.suit.regular_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toEndOf="@+id/tv_home_user_name"
-        app:layout_constraintTop_toTopOf="@id/tv_home_user_name" />
-
-      <TextView
-        android:id="@+id/tv_toast_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:text="@string/home_with_toaster"
-        android:textAppearance="@style/Typography.suit.regular_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="@+id/tv_home_user_name"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
-
-      <TextView
-        android:id="@+id/tv_home_toast_link_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home_link_count"
-        android:textAppearance="@style/Typography.suit.extrabold_20"
-        android:textColor="@color/primary"
-        app:layout_constraintStart_toEndOf="@+id/tv_toast_second"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home_collect_stamps"
-        android:textAppearance="@style/Typography.suit.regular_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toEndOf="@+id/tv_home_toast_link_count"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_user_name" />
-
-      <TextView
-        android:id="@+id/tv_home_last_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:text="@string/home_unforget_read"
-        android:textAppearance="@style/Typography.suit.regular_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="@+id/tv_home_user_name"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_toast_link_count" />
-
-      <TextView
-        android:id="@+id/tv_home_toast_progress_link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="8dp"
-        android:text="@string/home_toast_progress_link"
-        android:textAppearance="@style/Typography.suit.extrabold_20"
-        android:textColor="@color/primary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_last_comment" />
-
-      <TextView
-        android:id="@+id/tv_all_toast_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/home_all_toast_ex_num"
-        android:textAppearance="@style/Typography.suit.regular_16"
-        android:textColor="@color/neutrals300"
-        app:layout_constraintBottom_toBottomOf="@id/tv_home_toast_progress_link"
-        app:layout_constraintStart_toEndOf="@+id/tv_home_toast_progress_link" />
-
-      <designsystem.components.horizontalprogressbar.LinkMindHorizontalProgressBar
-        android:id="@+id/pb_linkmind_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="6dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_toast_progress_link" />
-
-      <View
-        android:id="@+id/view_divider_first"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/neutrals050"
-        app:layout_constraintTop_toBottomOf="@id/pb_linkmind_home" />
-
-      <TextView
-        android:id="@+id/tv_home_user_clip_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="24dp"
-        android:text="@string/home_ex_user_name"
-        android:textAppearance="@style/Typography.suit.bold_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider_first" />
-
-      <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="24dp"
-        android:text="@string/home_user_clip"
-        android:textAppearance="@style/Typography.suit.regular_20"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toEndOf="@+id/tv_home_user_clip_name"
-        app:layout_constraintTop_toTopOf="@id/tv_home_user_clip_name" />
-
-      <ImageView
-        android:id="@+id/iv_recent_clip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_black_svg"
-        android:paddingBottom="7dp"
-        android:paddingEnd="26dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/tv_home_user_clip_name"/>
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_home_clip"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingHorizontal="20dp"
-        android:paddingTop="14dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_user_clip_name"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_home_clip" />
-
-      <View
-        android:id="@+id/view_divider_second"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/neutrals050"
-        app:layout_constraintTop_toBottomOf="@id/rv_home_clip" />
-
-      <TextView
-        android:id="@+id/tv_home_week_link_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="18dp"
-        android:text="@string/home_this_week_link"
-        android:textAppearance="@style/Typography.suit.medium_18"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider_second" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_week_link"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="20dp"
-        android:nestedScrollingEnabled="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_week_link_title"
-        tools:listitem="@layout/item_week_link" />
-      <View
-        android:id="@+id/view_divider_third"
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/neutrals050"
-        app:layout_constraintTop_toBottomOf="@id/rv_week_link" />
-
-      <TextView
-        android:id="@+id/tv_home_week_recommend_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="24dp"
-        android:nestedScrollingEnabled="false"
-        android:paddingBottom="18dp"
-        android:text="@string/home_this_week_recommend"
-        android:textAppearance="@style/Typography.suit.medium_18"
-        android:textColor="@color/neutrals900"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_divider_third" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_home_week_recommend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="20dp"
-        app:spanCount="3"
-        android:paddingBottom="80dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_home_week_recommend_title"
-        tools:listitem="@layout/item_week_link" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-  </androidx.core.widget.NestedScrollView>
-  <View
-    android:id="@+id/v_snack"
-    android:layout_width="match_parent"
-    android:layout_height="20dp"
-    android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

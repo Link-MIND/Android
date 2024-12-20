@@ -8,6 +8,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
@@ -77,6 +78,32 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
+    runCatching {
+      val booleanListFlow =
+        dataStore.flowTooltip().first().toString()
+      val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
+      if (stringValue[1]) {
+        delay(showDelay)
+        reduce {
+          state.copy(visibleBubbleMark = true)
+        }
+        delay(duration)
+        reduce {
+          state.copy(visibleBubbleMark = false)
+        }
+        dataStore.setTooltip(
+          listOf(
+            stringValue[0],
+            !stringValue[1],
+            stringValue[2],
+            stringValue[3],
+          ).joinToString(","),
+        )
+      }
+    }
+  }
+
   fun getRecommendSite() = intent {
     getRecommendSite.invoke().onSuccess {
       reduce {
@@ -133,10 +160,15 @@ class HomeViewModel @Inject constructor(
             intent {
               postSideEffect(HomeSideEffect.ShowUpdateDialog)
               reduce {
-                state.copy(marketUpdate = UpdatePriority.toUpdatePriority(appUpdateInfo.updatePriority()))
+                state.copy(
+                  marketUpdate = UpdatePriority.toUpdatePriority(
+                    appUpdateInfo.updatePriority(),
+                  ),
+                )
               }
             }
           }
+//          setToolTip()
         }.addOnFailureListener { appUpdateInfo ->
           Log.d("appUpdateInfo", appUpdateInfo.message.toString())
         }
@@ -144,13 +176,18 @@ class HomeViewModel @Inject constructor(
     }
   }
 
+  fun setToolTip() = viewModelScope.launch {
+    dataStore.setTooltip(listOf(true, true, true, true).joinToString(","))
+  }
+
   fun navigateSetting() = intent { postSideEffect(HomeSideEffect.NavigateSetting) }
   fun navigateSaveLink() = intent { postSideEffect(HomeSideEffect.NavigateSaveLink) }
   fun navigateAllClip() = intent { postSideEffect(HomeSideEffect.NavigateAllClip) }
 
   @OptIn(OrbitExperimental::class)
-  fun navigateWebview(url: String) = blockingIntent {
-    reduce { state.copy(url = url) }
+  fun navigateWebview(url: String, isRead: Boolean = false, toastId: Long = 0) = blockingIntent {
+    reduce { state.copy(url = url, toastId = toastId, isRead = isRead) }
+    Log.d("testSak", "$toastId $isRead")
     postSideEffect(HomeSideEffect.NavigateWebView)
   }
 

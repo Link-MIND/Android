@@ -16,10 +16,13 @@ data class HomeState(
   val recommendLink: List<RecommendLink> = emptyList(),
   val recentSavedLink: List<RecentSavedLink?> = emptyList(),
   val url: String = "",
+  val toastId: Long = 0,
+  val isRead: Boolean = false,
   val categoryId: Long? = 0,
   val categoryName: String? = "전체 클립",
   val popupList: List<PopupInfo> = emptyList(),
   val marketUpdate: UpdatePriority = UpdatePriority.EMPTY,
+  val visibleBubbleMark: Boolean = false,
 ) {
   fun calculateProgress(): Int {
     if (readToastNum > allToastNum) return 0

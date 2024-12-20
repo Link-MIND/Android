@@ -50,6 +50,18 @@ interface SecurityDataStore {
   @SetValue(KEY_MARKET_UPDATE)
   suspend fun setMarketUpdate(boolean: Boolean)
 
+  @GetValue(TOOLTIP)
+  fun flowTooltip(): Flow<String>
+
+  @SetValue(TOOLTIP)
+  suspend fun setTooltip(boolean: String)
+
+  @GetValue(RECENT_LINK)
+  fun flowRecentLink(): Flow<String>
+
+  @SetValue(RECENT_LINK)
+  suspend fun setRecentLink(link: String)
+
   @ClearValues
   suspend fun clearAll()
 
@@ -61,5 +73,7 @@ interface SecurityDataStore {
     const val KEY_FCM_ALLOWED = "key-fcm-allowed"
     const val KEY_POPUP_VISIBILITY = "key-popup-dialog"
     const val KEY_MARKET_UPDATE = "key-market-update"
+    const val TOOLTIP = "tooltip"
+    const val RECENT_LINK = "recent_link"
   }
 }
