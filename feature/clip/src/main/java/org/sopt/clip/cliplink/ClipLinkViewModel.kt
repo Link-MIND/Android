@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.sopt.clip.SelectedToggle
 import org.sopt.datastore.datastore.SecurityDataStore
 import org.sopt.domain.category.category.usecase.GetCategoryAllUseCase
 import org.sopt.domain.category.category.usecase.GetCategoryLinkUseCase
@@ -53,27 +52,27 @@ class ClipLinkViewModel @Inject constructor(
   private val _patchLinkCategory = MutableStateFlow<UiState<Long>>(UiState.Empty)
   val patchLinkCategory: StateFlow<UiState<Long>> = _patchLinkCategory.asStateFlow()
 
-  var toggleSelectedPast: SelectedToggle = SelectedToggle.ALL
   init {
     showThenHide()
   }
+
   val tooltip = MutableStateFlow(false)
-  fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = viewModelScope.launch(Dispatchers.IO) {
+  private fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = viewModelScope.launch(Dispatchers.IO) {
     runCatching {
       val booleanListFlow =
         dataStore.flowTooltip().first().toString()
       val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
-      if (stringValue[3]) {
+      if (stringValue.getOrElse(3) { true }) {
         delay(showDelay)
-        tooltip.emit(stringValue[3])
+        tooltip.emit(true)
         delay(duration)
         tooltip.emit(false)
         dataStore.setTooltip(
           listOf(
             stringValue[0],
-            stringValue[1],
-            stringValue[2],
-            !stringValue[3],
+            stringValue.getOrElse(1) { true },
+            stringValue.getOrElse(2) { true },
+            false,
           ).joinToString(","),
         )
       }
