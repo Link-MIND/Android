@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
       val booleanListFlow =
         dataStore.flowTooltip().first().toString()
       val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
-      if (stringValue[0]) {
+      if (!stringValue[0]) {
         delay(showDelay)
         reduce {
           state.copy(visibleBubbleMark = true)
@@ -34,17 +34,10 @@ class MainViewModel @Inject constructor(
         reduce {
           state.copy(visibleBubbleMark = false)
         }
-        dataStore.setTooltip(
-          listOf(
-            !stringValue[0],
-            !stringValue[1],
-            stringValue[2],
-            stringValue[3],
-          ).joinToString(","),
-        )
       }
     }
   }
+
   fun updateClipBoard(clipboard: String) = intent {
     reduce {
       state.copy(clipboard = clipboard)

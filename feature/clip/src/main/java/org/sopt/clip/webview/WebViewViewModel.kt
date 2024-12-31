@@ -28,12 +28,13 @@ class WebViewViewModel @Inject constructor(
       Log.e("실패", it.message.toString())
     }
   }
+
   fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = viewModelScope.launch(Dispatchers.IO) {
     runCatching {
       val booleanListFlow =
         dataStore.flowTooltip().first().toString()
       val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
-      if (stringValue[2]) {
+      if (stringValue.getOrElse(2) { true }) {
         delay(showDelay)
         tooltip.emit(true)
         delay(duration)
@@ -41,7 +42,14 @@ class WebViewViewModel @Inject constructor(
         tooltip2.emit(true)
         delay(duration)
         tooltip2.emit(false)
-        dataStore.setTooltip(listOf(stringValue[0], stringValue[1], !stringValue[2], stringValue[3]).joinToString(","))
+        dataStore.setTooltip(
+          listOf(
+            stringValue[0],
+            stringValue.getOrElse(1) { true },
+            false,
+            stringValue.getOrElse(3) { true },
+          ).joinToString(","),
+        )
       }
     }
   }

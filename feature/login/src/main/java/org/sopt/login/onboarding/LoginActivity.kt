@@ -110,7 +110,6 @@ class LoginActivity : AppCompatActivity() {
   private fun initMarketUpdateVisible() {
     lifecycleScope.launch {
       dataStore.setMarketUpdate(true)
-      dataStore.setTooltip(listOf(true, true, true, true).joinToString(","))
     }
   }
 

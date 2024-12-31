@@ -20,7 +20,6 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import org.sopt.datastore.datastore.SecurityDataStore
-import org.sopt.domain.category.category.usecase.PostAddCategoryTitleUseCase
 import org.sopt.home.model.UpdatePriority
 import org.sopt.home.usecase.GetMainPageUserClip
 import org.sopt.home.usecase.GetPopupInfo
@@ -40,7 +39,6 @@ class HomeViewModel @Inject constructor(
   private val getRecommendSite: GetRecommendSite,
   private val getWeekBestLink: GetWeekBestLink,
   private val getRecentSavedLink: GetRecentSavedLink,
-  private val postAddCategoryTitle: PostAddCategoryTitleUseCase,
   private val patchPopupInvisible: PatchPopupInvisible,
   private val getPopupInfo: GetPopupInfo,
   private val dataStore: SecurityDataStore,
@@ -80,10 +78,9 @@ class HomeViewModel @Inject constructor(
 
   fun showThenHide(showDelay: Long = 500, duration: Long = 2000) = intent {
     runCatching {
-      val booleanListFlow =
-        dataStore.flowTooltip().first().toString()
+      val booleanListFlow = dataStore.flowTooltip().first().toString()
       val stringValue = booleanListFlow.split(",").map { it.toBoolean() }
-      if (stringValue[1]) {
+      if (stringValue.getOrElse(1) { true }) {
         delay(showDelay)
         reduce {
           state.copy(visibleBubbleMark = true)
@@ -94,10 +91,10 @@ class HomeViewModel @Inject constructor(
         }
         dataStore.setTooltip(
           listOf(
-            stringValue[0],
-            !stringValue[1],
-            stringValue[2],
-            stringValue[3],
+            true,
+            false,
+            stringValue.getOrElse(2) { true },
+            stringValue.getOrElse(3) { true },
           ).joinToString(","),
         )
       }

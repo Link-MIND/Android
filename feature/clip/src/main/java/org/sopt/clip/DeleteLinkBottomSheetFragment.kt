@@ -12,9 +12,9 @@ import org.sopt.ui.view.onThrottleClick
 
 class DeleteLinkBottomSheetFragment() :
   BindingBottomSheetDialogFragment<FragmentDeleteLinkBottomSheetBinding>({ FragmentDeleteLinkBottomSheetBinding.inflate(it) }) {
-  var clipId: Long? = null
-  var isFullClipSize: Boolean? = null
-  var tooltip: Boolean? = null
+  private var clipId: Long? = null
+  private var isFullClipSize: Boolean? = null
+  private var tooltip: Boolean? = null
   private var handleDelete: () -> Unit = {}
   private var handleChange: () -> Unit = {}
   private var handleModify: () -> Unit = {}
