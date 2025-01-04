@@ -42,67 +42,25 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/iv_clip_edit_back" />
 
-  <androidx.core.widget.NestedScrollView
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_marginTop="22dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tv_clip_edit_guide_msg">
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/rv_clip_edit"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="44dp"
+      android:paddingVertical="15dp"
+      android:nestedScrollingEnabled="false"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/iv_clip_edit_back"
+      tools:itemCount="3"
+      tools:listitem="@layout/item_clip_edit_clip" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <ImageView
-        android:id="@+id/iv_pin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:src="@drawable/ic_pin_24"
-        app:layout_constraintBottom_toBottomOf="@id/tv_all_clip"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_all_clip" />
-
-      <TextView
-        android:id="@+id/tv_all_clip"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/shape_white_fill_12_rect"
-        android:paddingVertical="15dp"
-        android:paddingStart="14dp"
-        android:text="@string/clip_all_clip"
-        android:textAppearance="@style/Typography.suit.semibold_16"
-        android:textColor="@color/neutrals850"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_pin"
-        app:layout_constraintTop_toTopOf="parent" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_clip_edit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="22dp"
-        android:overScrollMode="never"
-        android:nestedScrollingEnabled="false"
-        android:layout_marginEnd="20dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_pin"
-        tools:itemCount="3"
-        tools:listitem="@layout/item_clip_edit_clip" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-  </androidx.core.widget.NestedScrollView>
   <View
     android:id="@+id/v_snack"
     android:layout_width="match_parent"
     android:layout_height="20dp"
-    app:layout_constraintBottom_toBottomOf="parent"/>
+    app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
